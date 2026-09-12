@@ -1,0 +1,1508 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   DATA DETECTIVE — INTELLIGENCE REPORT
+   Self-contained page styling
+========================================================= */
+
+.intelligence-page {
+    width: min(1180px, 92%);
+    margin: 0 auto;
+    padding: 55px 0 90px;
+    color: #f1ede3;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.intelligence-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+
+.intelligence-title {
+    max-width: 760px;
+}
+
+.intelligence-title .tag {
+    color: #d8a24a;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 13px;
+}
+
+.intelligence-title h1 {
+    margin: 0;
+    font-size: clamp(38px, 5vw, 62px);
+    line-height: .95;
+    letter-spacing: -2px;
+    font-weight: 800;
+}
+
+.intelligence-title h1 span {
+    color: #d8a24a;
+}
+
+.intelligence-title > p:not(.tag) {
+    margin-top: 18px;
+    max-width: 680px;
+    color: #918d84;
+    line-height: 1.7;
+}
+
+
+/* CASE IDENTIFIER */
+
+.intelligence-case {
+    min-width: 175px;
+    padding: 15px 18px;
+
+    background: #151513;
+    border: 1px solid #39362e;
+}
+
+.intelligence-case span {
+    display: block;
+
+    color: #706c63;
+
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    margin-bottom: 7px;
+}
+
+.intelligence-case strong {
+    color: #d8a24a;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   REPORT STATUS
+========================================================= */
+
+.report-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    background: #121211;
+    border: 1px solid #302e29;
+
+    margin-bottom: 25px;
+
+    font-size: 10px;
+    letter-spacing: 1.7px;
+    color: #77736a;
+}
+
+.report-status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #d8a24a;
+
+    box-shadow:
+        0 0 0 4px rgba(216,162,74,.08),
+        0 0 12px rgba(216,162,74,.4);
+
+    animation: intelligencePulse 2s infinite;
+}
+
+
+/* =========================================================
+   OVERVIEW
+========================================================= */
+
+.intelligence-overview {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 35px;
+}
+
+.intelligence-stat {
+    position: relative;
+
+    padding: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.025),
+            transparent 70%
+        ),
+        #151513;
+
+    border: 1px solid #35332d;
+
+    overflow: hidden;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease;
+}
+
+.intelligence-stat:hover {
+    transform: translateY(-3px);
+    border-color: #62502e;
+}
+
+.intelligence-stat::after {
+    content: "";
+
+    position: absolute;
+
+    right: -25px;
+    bottom: -30px;
+
+    width: 80px;
+    height: 80px;
+
+    border-radius: 50%;
+
+    background: rgba(216,162,74,.04);
+}
+
+.intelligence-stat span {
+    display: block;
+
+    color: #77736a;
+
+    font-size: 9px;
+    letter-spacing: 1.8px;
+
+    margin-bottom: 10px;
+}
+
+.intelligence-stat strong {
+    display: block;
+
+    color: #eee9dd;
+
+    font-size: 27px;
+    line-height: 1;
+}
+
+.intelligence-stat small {
+    display: block;
+
+    color: #69655d;
+
+    margin-top: 9px;
+
+    font-size: 10px;
+}
+
+.intelligence-stat.highlight {
+    border-color: #67522e;
+}
+
+.intelligence-stat.highlight strong {
+    color: #d8a24a;
+}
+
+
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
+
+.intelligence-section {
+    margin-bottom: 38px;
+}
+
+.intelligence-section-heading {
+    margin-bottom: 18px;
+}
+
+.intelligence-section-heading .tag {
+    color: #77736a;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 7px;
+}
+
+.intelligence-section-heading h2 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: -.5px;
+}
+
+.intelligence-section-heading p {
+    color: #77736a;
+    margin-top: 7px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   HIGHEST RISK
+========================================================= */
+
+.highest-risk {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        90px 1fr 180px;
+
+    gap: 25px;
+
+    align-items: center;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216,162,74,.07),
+            transparent 50%
+        ),
+        #151513;
+
+    border: 1px solid #5b492c;
+
+    margin-bottom: 35px;
+
+    overflow: hidden;
+}
+
+.highest-risk::before {
+    content: "HIGH RISK";
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    padding: 7px 13px;
+
+    background: #2a2115;
+
+    color: #d8a24a;
+
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.risk-radar {
+    width: 76px;
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    border: 1px solid #71572e;
+
+    background:
+        radial-gradient(
+            circle,
+            #2b2114 0%,
+            #171511 60%,
+            #11110f 100%
+        );
+
+    color: #d8a24a;
+
+    font-size: 25px;
+
+    box-shadow:
+        0 0 25px rgba(216,162,74,.08);
+}
+
+.highest-risk-info span {
+    display: block;
+
+    color: #77736a;
+
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    margin-bottom: 7px;
+}
+
+.highest-risk-info h2 {
+    margin: 0;
+
+    font-size: 25px;
+}
+
+.highest-risk-info p {
+    margin-top: 7px;
+
+    color: #858178;
+
+    font-size: 13px;
+}
+
+.highest-risk-score {
+    text-align: right;
+}
+
+.highest-risk-score span {
+    display: block;
+
+    color: #77736a;
+
+    font-size: 9px;
+
+    letter-spacing: 1.7px;
+}
+
+.highest-risk-score strong {
+    display: block;
+
+    color: #d8a24a;
+
+    font-size: 42px;
+
+    line-height: 1;
+
+    margin-top: 7px;
+}
+
+.highest-risk-score small {
+    color: #6d685f;
+}
+
+
+/* =========================================================
+   SUSPECT INTELLIGENCE
+========================================================= */
+
+.intelligence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.intelligence-card {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        58px 1fr 140px;
+
+    gap: 20px;
+
+    padding: 23px;
+
+    background: #151513;
+
+    border: 1px solid #34322c;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
+
+.intelligence-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #5b5039;
+
+    background: #181713;
+}
+
+.intelligence-card.highest-risk {
+    border-color: #67522e;
+}
+
+.intelligence-rank {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #10100f;
+
+    border: 1px solid #37342e;
+
+    color: #a29d92;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.intelligence-card.highest-risk
+.intelligence-rank {
+    color: #d8a24a;
+    border-color: #62502e;
+}
+
+.intelligence-person h3 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+.intelligence-person > span {
+    display: block;
+
+    color: #77736a;
+
+    margin-top: 5px;
+
+    font-size: 10px;
+    letter-spacing: 1.3px;
+}
+
+.intelligence-score {
+    text-align: right;
+}
+
+.intelligence-score span {
+    display: block;
+
+    color: #77736a;
+
+    font-size: 9px;
+    letter-spacing: 1.5px;
+}
+
+.intelligence-score strong {
+    display: block;
+
+    color: #d8a24a;
+
+    font-size: 31px;
+
+    margin-top: 5px;
+}
+
+
+/* PROGRESS */
+
+.intelligence-progress {
+    grid-column: 2 / 4;
+
+    height: 7px;
+
+    background: #292722;
+
+    overflow: hidden;
+}
+
+.intelligence-progress-fill {
+    height: 100%;
+
+    width: var(--risk, 50%);
+
+    background:
+        linear-gradient(
+            90deg,
+            #73582e,
+            #d8a24a
+        );
+
+    transform-origin: left;
+
+    animation: riskLoad 1.2s ease both;
+}
+
+
+/* =========================================================
+   STATISTICS INSIDE CARDS
+========================================================= */
+
+.intelligence-stats {
+    grid-column: 1 / -1;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-top: 4px;
+}
+
+.intelligence-stats div {
+    padding: 13px;
+
+    background: #10100f;
+
+    border: 1px solid #2c2a26;
+}
+
+.intelligence-stats span {
+    display: block;
+
+    color: #68645c;
+
+    font-size: 8px;
+    letter-spacing: 1.3px;
+
+    margin-bottom: 6px;
+}
+
+.intelligence-stats strong {
+    color: #d5d0c5;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RISK REASONS
+========================================================= */
+
+.risk-reasons {
+    grid-column: 1 / -1;
+
+    padding-top: 17px;
+
+    border-top: 1px solid #2d2b27;
+}
+
+.risk-reasons > span {
+    color: #716d64;
+
+    font-size: 8px;
+    letter-spacing: 1.7px;
+}
+
+.risk-reasons ul {
+    margin: 10px 0 0;
+    padding-left: 18px;
+}
+
+.risk-reasons li {
+    color: #8d887f;
+
+    margin-bottom: 6px;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   SCORING METHODOLOGY
+========================================================= */
+
+.scoring-panel {
+    padding: 27px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216,162,74,.035),
+            transparent 60%
+        ),
+        #141412;
+
+    border: 1px solid #34322d;
+}
+
+.scoring-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 13px;
+
+    margin-top: 20px;
+}
+
+.scoring-item {
+    padding: 20px;
+
+    background: #10100f;
+
+    border: 1px solid #2e2c27;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease;
+}
+
+.scoring-item:hover {
+    transform: translateY(-2px);
+    border-color: #55472e;
+}
+
+.scoring-item strong {
+    display: block;
+
+    color: #d8a24a;
+
+    font-size: 20px;
+
+    margin-bottom: 7px;
+}
+
+.scoring-item span {
+    display: block;
+
+    color: #d0cbc0;
+
+    font-size: 12px;
+}
+
+.scoring-item small {
+    display: block;
+
+    color: #6e6a62;
+
+    margin-top: 6px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   WARNING
+========================================================= */
+
+.intelligence-warning {
+    position: relative;
+
+    padding: 24px 25px 24px 27px;
+
+    background: #181510;
+
+    border: 1px solid #4b3c27;
+
+    border-left: 3px solid #d8a24a;
+
+    margin-bottom: 35px;
+}
+
+.intelligence-warning::before {
+    content: "!";
+
+    position: absolute;
+
+    right: 22px;
+    top: 18px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #59472b;
+    border-radius: 50%;
+
+    color: #d8a24a;
+}
+
+.intelligence-warning > span {
+    color: #d8a24a;
+
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.intelligence-warning h2 {
+    margin: 9px 40px 8px 0;
+
+    font-size: 20px;
+}
+
+.intelligence-warning p {
+    max-width: 800px;
+
+    color: #928d83;
+
+    line-height: 1.7;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FOOTER ACTIONS
+========================================================= */
+
+.intelligence-actions {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #2d2b27;
+}
+
+.intelligence-actions p {
+    margin: 0;
+
+    color: #625e56;
+
+    font-size: 11px;
+}
+
+.intelligence-back {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 12px 18px;
+
+    color: #d6d0c4;
+
+    text-decoration: none;
+
+    background: #151513;
+
+    border: 1px solid #39362f;
+
+    font-size: 11px;
+
+    letter-spacing: .7px;
+
+    transition:
+        color .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.intelligence-back:hover {
+    color: #d8a24a;
+
+    border-color: #63502e;
+
+    transform: translateX(-3px);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes intelligencePulse {
+
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .45;
+        transform: scale(.8);
+    }
+
+}
+
+@keyframes riskLoad {
+
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+
+}
+
+@keyframes intelligenceReveal {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+.intelligence-header,
+.report-status,
+.intelligence-overview,
+.highest-risk,
+.intelligence-section,
+.intelligence-warning {
+    animation: intelligenceReveal .55s ease both;
+}
+
+.intelligence-card {
+    animation: intelligenceReveal .5s ease both;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .intelligence-overview {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .highest-risk {
+        grid-template-columns:
+            80px 1fr;
+    }
+
+    .highest-risk-score {
+        grid-column: 2;
+        text-align: left;
+    }
+
+    .scoring-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .intelligence-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .intelligence-case {
+        width: 100%;
+    }
+
+    .intelligence-card {
+        grid-template-columns:
+            50px 1fr;
+    }
+
+    .intelligence-score {
+        grid-column: 2;
+        text-align: left;
+    }
+
+    .intelligence-progress {
+        grid-column: 1 / -1;
+    }
+
+    .intelligence-stats {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 550px) {
+
+    .intelligence-page {
+        width: 92%;
+        padding: 35px 0 60px;
+    }
+
+    .intelligence-title h1 {
+        font-size: 40px;
+        letter-spacing: -1px;
+    }
+
+    .intelligence-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .highest-risk {
+        grid-template-columns: 1fr;
+        padding: 22px;
+    }
+
+    .highest-risk-score {
+        grid-column: auto;
+    }
+
+    .intelligence-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .scoring-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .intelligence-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .intelligence-header,
+    .report-status,
+    .intelligence-overview,
+    .highest-risk,
+    .intelligence-section,
+    .intelligence-warning,
+    .intelligence-card {
+        animation: none;
+    }
+
+    .report-status-dot,
+    .intelligence-progress-fill {
+        animation: none;
+    }
+
+}
+
+</style>
+
+
+<div class="intelligence-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="intelligence-header">
+
+        <div class="intelligence-title">
+
+            <p class="tag">
+                ADVANCED INVESTIGATION
+            </p>
+
+            <h1>
+                INTELLIGENCE
+                <span>REPORT.</span>
+            </h1>
+
+            <p>
+                A consolidated behavioral analysis generated from
+                transaction anomalies, movement patterns, and
+                suspect activity.
+            </p>
+
+        </div>
+
+
+        <div class="intelligence-case">
+
+            <span>
+                ACTIVE CASE
+            </span>
+
+            <strong>
+                {{ case.id|upper }}
+            </strong>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+    <div class="report-status">
+
+        <span class="report-status-dot"></span>
+
+        INTELLIGENCE ENGINE ACTIVE
+
+        <span>
+            •
+        </span>
+
+        BEHAVIORAL DATA ANALYZED
+
+    </div>
+
+
+    <!-- =====================================================
+         OVERVIEW
+    ====================================================== -->
+
+    <section class="intelligence-overview">
+
+        <div class="intelligence-stat">
+
+            <span>
+                TRANSACTIONS
+            </span>
+
+            <strong>
+                {{ intelligence.total_transactions
+                   if intelligence.total_transactions is defined
+                   else "—" }}
+            </strong>
+
+            <small>
+                ANALYZED RECORDS
+            </small>
+
+        </div>
+
+
+        <div class="intelligence-stat">
+
+            <span>
+                ANOMALIES
+            </span>
+
+            <strong>
+                {{ intelligence.anomaly_count
+                   if intelligence.anomaly_count is defined
+                   else "—" }}
+            </strong>
+
+            <small>
+                SUSPICIOUS EVENTS
+            </small>
+
+        </div>
+
+
+        <div class="intelligence-stat">
+
+            <span>
+                MOVEMENTS
+            </span>
+
+            <strong>
+                {{ intelligence.movement_count
+                   if intelligence.movement_count is defined
+                   else "—" }}
+            </strong>
+
+            <small>
+                LOCATION EVENTS
+            </small>
+
+        </div>
+
+
+        <div class="intelligence-stat highlight">
+
+            <span>
+                RISK LEVEL
+            </span>
+
+            <strong>
+                {{ intelligence.risk_level
+                   if intelligence.risk_level is defined
+                   else "ACTIVE" }}
+            </strong>
+
+            <small>
+                SYSTEM ASSESSMENT
+            </small>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         HIGHEST RISK
+    ====================================================== -->
+
+    {% if intelligence.highest_risk is defined
+          and intelligence.highest_risk %}
+
+    <section class="highest-risk">
+
+        <div class="risk-radar">
+            !
+        </div>
+
+
+        <div class="highest-risk-info">
+
+            <span>
+                HIGHEST RISK SUBJECT
+            </span>
+
+            <h2>
+                {{ intelligence.highest_risk.name
+                   if intelligence.highest_risk.name is defined
+                   else intelligence.highest_risk.id }}
+            </h2>
+
+            {% if intelligence.highest_risk.reason is defined %}
+
+            <p>
+                {{ intelligence.highest_risk.reason }}
+            </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="highest-risk-score">
+
+            <span>
+                SUSPICION SCORE
+            </span>
+
+            <strong>
+                {{ intelligence.highest_risk.score
+                   if intelligence.highest_risk.score is defined
+                   else "—" }}
+            </strong>
+
+            <small>
+                / 100
+            </small>
+
+        </div>
+
+    </section>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         SUSPECT INTELLIGENCE
+    ====================================================== -->
+
+    <section class="intelligence-section">
+
+        <div class="intelligence-section-heading">
+
+            <p class="tag">
+                SUBJECT ANALYSIS
+            </p>
+
+            <h2>
+                Suspect Intelligence
+            </h2>
+
+            <p>
+                Behavioral indicators ranked according to
+                evidence discovered during the investigation.
+            </p>
+
+        </div>
+
+
+        {% if intelligence.suspects is defined
+              and intelligence.suspects %}
+
+        <div class="intelligence-list">
+
+            {% for suspect in intelligence.suspects %}
+
+            <article class="intelligence-card
+                {% if loop.first %}highest-risk{% endif %}">
+
+
+                <div class="intelligence-rank">
+                    {{ "%02d"|format(loop.index) }}
+                </div>
+
+
+                <div class="intelligence-person">
+
+                    <h3>
+                        {{ suspect.name
+                           if suspect.name is defined
+                           else suspect.id }}
+                    </h3>
+
+                    {% if suspect.id is defined %}
+
+                    <span>
+                        SUBJECT ID:
+                        {{ suspect.id }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="intelligence-score">
+
+                    <span>
+                        RISK SCORE
+                    </span>
+
+                    <strong>
+                        {{ suspect.score
+                           if suspect.score is defined
+                           else "—" }}
+                    </strong>
+
+                </div>
+
+
+                {% if suspect.score is defined %}
+
+                <div
+                    class="intelligence-progress"
+                    style="--risk: {{ suspect.score }}%;"
+                >
+
+                    <div
+                        class="intelligence-progress-fill"
+                    ></div>
+
+                </div>
+
+                {% endif %}
+
+
+                {% if suspect.statistics is defined %}
+
+                <div class="intelligence-stats">
+
+                    {% for key, value in suspect.statistics.items() %}
+
+                    <div>
+
+                        <span>
+                            {{ key|replace("_", " ")|upper }}
+                        </span>
+
+                        <strong>
+                            {{ value }}
+                        </strong>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% endif %}
+
+
+                {% if suspect.reasons is defined
+                      and suspect.reasons %}
+
+                <div class="risk-reasons">
+
+                    <span>
+                        RISK INDICATORS
+                    </span>
+
+                    <ul>
+
+                        {% for reason in suspect.reasons %}
+
+                        <li>
+                            {{ reason }}
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+                {% endif %}
+
+            </article>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% else %}
+
+        <!-- FALLBACK -->
+
+        <div class="intelligence-card">
+
+            <div class="intelligence-rank">
+                —
+            </div>
+
+            <div class="intelligence-person">
+
+                <h3>
+                    Intelligence data unavailable
+                </h3>
+
+                <span>
+                    NO SUBJECT PROFILE GENERATED
+                </span>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- =====================================================
+         SCORING
+    ====================================================== -->
+
+    <section class="intelligence-section">
+
+        <div class="scoring-panel">
+
+            <div class="intelligence-section-heading">
+
+                <p class="tag">
+                    ANALYTICAL FRAMEWORK
+                </p>
+
+                <h2>
+                    How suspicion is calculated.
+                </h2>
+
+                <p>
+                    Multiple behavioral signals are combined
+                    to identify subjects that deserve closer
+                    investigation.
+                </p>
+
+            </div>
+
+
+            <div class="scoring-grid">
+
+                <div class="scoring-item">
+
+                    <strong>
+                        01
+                    </strong>
+
+                    <span>
+                        TRANSACTION ANOMALIES
+                    </span>
+
+                    <small>
+                        Unusual transaction behavior
+                        increases suspicion.
+                    </small>
+
+                </div>
+
+
+                <div class="scoring-item">
+
+                    <strong>
+                        02
+                    </strong>
+
+                    <span>
+                        BEHAVIORAL PATTERNS
+                    </span>
+
+                    <small>
+                        Repeated or unusual behavior
+                        is analyzed.
+                    </small>
+
+                </div>
+
+
+                <div class="scoring-item">
+
+                    <strong>
+                        03
+                    </strong>
+
+                    <span>
+                        TIMELINE CORRELATION
+                    </span>
+
+                    <small>
+                        Events occurring close together
+                        may reveal relationships.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INVESTIGATOR WARNING
+    ====================================================== -->
+
+    <section class="intelligence-warning">
+
+        <span>
+            INVESTIGATOR NOTICE
+        </span>
+
+        <h2>
+            A high score is a lead — not a verdict.
+        </h2>
+
+        <p>
+            Machine learning and behavioral analysis identify
+            patterns that deserve attention. They do not establish
+            guilt on their own. Cross-check the intelligence report
+            against the timeline, connected events, and evidence
+            before making an accusation.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACTIONS
+    ====================================================== -->
+
+    <div class="intelligence-actions">
+
+        <p>
+            DATA DETECTIVE • INTELLIGENCE ENGINE
+        </p>
+
+        <a
+            class="intelligence-back"
+            href="{{ url_for('investigation') }}"
+        >
+            ← BACK TO INVESTIGATION
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

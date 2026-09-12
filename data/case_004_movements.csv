@@ -1,0 +1,13 @@
+event_id,suspect_id,date,time,location,event_type,description,case_id
+M401,S01,2026-09-14,20:10,Research Building,EXIT,Left the research building.,case_004
+M402,S03,2026-09-14,22:35,Server Room,ENTRY,Entered the restricted server room.,case_004
+M403,S04,2026-09-14,22:40,Finance Office,LOGIN,Accessed procurement records.,case_004
+M404,S03,2026-09-14,23:15,Data Analytics Lab,ACCESS,Accessed the Aegis research archive.,case_004
+M405,S04,2026-09-14,23:25,Finance Office,TRANSFER,Reviewed a vendor payment record.,case_004
+M406,S03,2026-09-14,23:47,Server Room,EXIT,Left the restricted server room.,case_004
+M407,S02,2026-09-15,09:10,Finance Office,LOGIN,Started financial reconciliation.,case_004
+M408,S05,2026-09-15,10:15,Research Building,ENTRY,Entered the research building.,case_004
+M409,S06,2026-09-15,11:30,Administration Block,MEETING,Attended an administrative meeting.,case_004
+M410,S03,2026-09-15,23:20,Server Room,ENTRY,Entered the server room again.,case_004
+M411,S03,2026-09-15,23:45,Finance Office,ACCESS,Accessed the financial system.,case_004
+M412,S04,2026-09-16,00:05,Procurement Office,LOGIN,Accessed procurement records.,case_004

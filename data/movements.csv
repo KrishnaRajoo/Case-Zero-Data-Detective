@@ -1,0 +1,53 @@
+event_id,suspect_id,date,time,location,event_type,description
+M001,S01,2026-09-12,09:05,Finance Office,LOGIN,Started morning finance work.
+M002,S02,2026-09-12,09:20,Research Building,ENTRY,Entered research building.
+M003,S03,2026-09-12,09:35,Data Analytics Lab,ENTRY,Entered analytics laboratory.
+M004,S04,2026-09-12,10:00,Finance Office,MEETING,Reviewed project expenses.
+M005,S05,2026-09-12,10:15,Server Room,ACCESS,Performed routine server maintenance.
+M006,S01,2026-09-12,11:30,Finance Office,TRANSACTION,Processed routine payment.
+M007,S02,2026-09-12,12:10,Research Building,MEETING,Met with research team.
+M008,S03,2026-09-12,12:45,Data Analytics Lab,WORK,Analyzed project data.
+M009,S04,2026-09-12,13:20,Finance Office,APPROVAL,Approved routine project expenses.
+M010,S05,2026-09-12,13:40,Server Room,MAINTENANCE,Checked server systems.
+M011,S01,2026-09-12,15:00,Finance Office,EXIT,Left finance office.
+M012,S02,2026-09-12,15:15,Research Building,EXIT,Left research building.
+M013,S03,2026-09-12,15:30,Data Analytics Lab,EXIT,Left analytics laboratory.
+M014,S04,2026-09-12,16:00,Finance Office,EXIT,Left finance office.
+M015,S05,2026-09-12,17:10,Server Room,ACCESS,Returned to server room.
+M016,S05,2026-09-12,17:18,Server Room,SYSTEM_ACCESS,Accessed financial system terminal.
+M017,S05,2026-09-12,17:26,Server Room,SESSION,Opened transaction administration module.
+M018,S01,2026-09-12,18:00,Finance Office,EXIT,Completed work and left.
+M019,S02,2026-09-12,18:15,Research Building,EXIT,Completed research work.
+M020,S03,2026-09-12,18:30,Data Analytics Lab,EXIT,Completed analysis work.
+M021,S04,2026-09-12,18:45,Finance Office,EXIT,Left the building.
+M022,S05,2026-09-12,23:35,Server Room,ACCESS,Entered server room after normal working hours.
+M023,S05,2026-09-12,23:40,Server Room,SYSTEM_ACCESS,Accessed financial transaction system.
+M024,S05,2026-09-12,23:44,Server Room,TRANSACTION,Opened restricted transaction account.
+M025,S05,2026-09-12,23:47,Server Room,TRANSFER,Processed an external transfer.
+M026,S05,2026-09-12,23:49,Server Room,LOGOUT,Logged out of the financial system.
+M027,S05,2026-09-12,23:52,Server Room,EXIT,Left the server room.
+M028,S01,2026-09-12,23:55,Main Entrance,EXIT,Security system recorded final exit activity.
+M029,S01,2026-09-13,19:40,Finance Office,EXIT,Completed routine financial work and left the office.
+M030,S02,2026-09-13,19:45,Research Building,EXIT,Completed research coordination work.
+M031,S05,2026-09-13,20:00,Server Room,ACCESS,Performed a routine systems check.
+M032,S03,2026-09-13,20:35,IT Operations,LOGIN,Administrator account logged into the internal systems.
+M033,S04,2026-09-13,20:42,Procurement Office,ENTRY,Entered procurement office to review vendor documents.
+M034,S04,2026-09-13,20:51,Procurement Office,DOCUMENT_ACCESS,Accessed restricted vendor and purchase-order records.
+M035,S05,2026-09-13,20:55,Server Room,SYSTEM_ACCESS,Checked administrator systems before leaving.
+M036,S03,2026-09-13,21:02,IT Operations,SYSTEM_ACCESS,Accessed the financial application administration panel.
+M037,S04,2026-09-13,21:08,Finance Corridor,ENTRY,Entered the restricted finance corridor.
+M038,S04,2026-09-13,21:12,Finance Office,ACCESS,Used authorized procurement credentials near the finance terminal.
+M039,S03,2026-09-13,21:15,Finance System,LOGIN,Administrator credentials appeared in the financial system.
+M040,S04,2026-09-13,21:17,Finance Office,SESSION,Opened a financial transaction session.
+M041,S04,2026-09-13,21:18,Finance Office,TRANSACTION,First suspicious research-fund payment was created.
+M042,S04,2026-09-13,21:21,Finance Office,TRANSACTION,Additional split payment was created.
+M043,S05,2026-09-13,21:24,Server Room,EXIT,Left the server room after a routine systems check.
+M044,S04,2026-09-13,21:27,Procurement Office,RETURN,Returned to procurement office.
+M045,S04,2026-09-13,21:31,Procurement Office,DOCUMENT_ACCESS,Reopened vendor documentation.
+M046,S03,2026-09-13,21:34,IT Operations,LOGOUT,Administrator session ended.
+M047,S05,2026-09-13,21:38,Main Entrance,EXIT,Left the building.
+M048,S04,2026-09-13,21:43,Finance Corridor,EXIT,Left the restricted finance corridor.
+M049,S01,2026-09-13,21:47,Main Entrance,EXIT,Security system recorded departure.
+M050,S05,2026-09-13,21:50,Department Office,ENTRY,Returned briefly to collect personal items.
+M051,S05,2026-09-13,22:05,Department Office,EXIT,Left the department office.
+M052,S04,2026-09-13,22:12,Procurement Office,AUDIT,Reviewed the vendor payment register after the suspicious transfers.

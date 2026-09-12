@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Case Result | Case Zer</title>
+
+    <link rel="icon"
+          href="{{ url_for('static', filename='images/logo.png') }}"
+          type="image/png">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+/* =====================================================
+   GLOBAL RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(59,130,246,.08),
+            transparent 35%
+        ),
+        #0b1018;
+
+    color: #f4f4f5;
+
+    font-family:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.result-navbar {
+    width: 100%;
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    position: relative;
+    z-index: 1000;
+
+    background: rgba(11,16,24,.94);
+
+    border-bottom: 1px solid rgba(255,255,255,.08);
+
+    backdrop-filter: blur(18px);
+}
+
+.result-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+}
+
+.result-brand-logo {
+    width: 42px;
+    height: 42px;
+
+    object-fit: contain;
+
+    border-radius: 50%;
+}
+
+.result-brand-name {
+    font-size: 17px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.result-brand-name span {
+    color: #f59e0b;
+}
+
+.result-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+
+.result-nav-links a {
+    color: #aab4c3;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+
+    transition:
+        color .25s ease,
+        transform .25s ease;
+}
+
+.result-nav-links a:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.case-result-page {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding: 70px 24px 100px;
+
+    min-height: calc(100vh - 76px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+.case-result-page::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    opacity: .4;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 35px 35px;
+}
+
+/* =====================================================
+   RESULT CARD
+===================================================== */
+
+.result-card {
+    width: 100%;
+    max-width: 760px;
+
+    padding: 55px 50px;
+
+    position: relative;
+    z-index: 2;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(27,34,48,.98),
+            rgba(13,17,25,.98)
+        );
+
+    border: 1px solid #303846;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45);
+
+    animation: resultEnter .7s ease forwards;
+}
+
+.result-card.success {
+    border-color: rgba(34,197,94,.35);
+}
+
+.result-card.failure {
+    border-color: rgba(245,158,11,.35);
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.result-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 8px 14px;
+
+    border: 1px solid #343d4b;
+
+    background: rgba(255,255,255,.025);
+
+    color: #8e98a8;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.result-status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #f59e0b;
+
+    box-shadow:
+        0 0 10px rgba(245,158,11,.7);
+
+    animation: statusPulse 1.8s infinite;
+}
+
+.result-card.success .result-status-dot {
+    background: #22c55e;
+
+    box-shadow:
+        0 0 10px rgba(34,197,94,.8);
+}
+
+/* =====================================================
+   ICON
+===================================================== */
+
+.result-icon {
+    width: 82px;
+    height: 82px;
+
+    margin: 32px auto 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 34px;
+    font-weight: 800;
+
+    animation: iconAppear .8s ease .2s both;
+}
+
+.result-card.success .result-icon {
+    background: rgba(34,197,94,.10);
+
+    border: 1px solid rgba(34,197,94,.4);
+
+    color: #4ade80;
+
+    box-shadow:
+        0 0 35px rgba(34,197,94,.12);
+}
+
+.result-card.failure .result-icon {
+    background: rgba(245,158,11,.08);
+
+    border: 1px solid rgba(245,158,11,.35);
+
+    color: #fbbf24;
+
+    box-shadow:
+        0 0 35px rgba(245,158,11,.10);
+}
+
+/* =====================================================
+   TEXT
+===================================================== */
+
+.result-tag {
+    margin-bottom: 12px;
+
+    color: #a1aab8;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 3px;
+}
+
+.result-card h1 {
+    margin: 0;
+
+    color: #f4f4f5;
+
+    font-size: clamp(34px, 5vw, 58px);
+
+    line-height: 1;
+
+    letter-spacing: -2px;
+}
+
+.result-card h1 span {
+    display: block;
+
+    margin-top: 8px;
+
+    color: #f59e0b;
+}
+
+.result-card.success h1 span {
+    color: #4ade80;
+}
+
+.result-description {
+    max-width: 570px;
+
+    margin: 22px auto 0;
+
+    color: #9da7b6;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.result-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 35px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #343d4b,
+            transparent
+        );
+}
+
+/* =====================================================
+   SCORE GRID
+===================================================== */
+
+.result-stats {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 35px;
+}
+
+.result-stat {
+    padding: 20px 15px;
+
+    background: rgba(255,255,255,.025);
+
+    border: 1px solid #303846;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
+
+.result-stat:hover {
+    transform: translateY(-4px);
+
+    border-color: #596273;
+
+    background: rgba(255,255,255,.045);
+}
+
+.result-stat-label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #737e8e;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.result-stat-value {
+    display: block;
+
+    color: #f4f4f5;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.result-stat.score-stat {
+    border-color: rgba(245,158,11,.3);
+}
+
+.result-stat.score-stat .result-stat-value {
+    color: #fbbf24;
+}
+
+/* =====================================================
+   DETECTIVE LEVEL
+===================================================== */
+
+.detective-level {
+    margin-bottom: 35px;
+
+    padding: 18px 20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(245,158,11,.07),
+            transparent
+        );
+
+    border-left: 3px solid #f59e0b;
+
+    text-align: left;
+}
+
+.detective-level-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #737e8e;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+.detective-level strong {
+    color: #fbbf24;
+
+    font-size: 19px;
+
+    letter-spacing: .5px;
+}
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.result-actions {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+.result-button,
+.result-secondary {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.result-button {
+    gap: 18px;
+
+    min-width: 210px;
+
+    padding: 14px 22px;
+
+    color: #111318;
+
+    background: #f59e0b;
+
+    border: 1px solid #f59e0b;
+}
+
+.result-button b {
+    font-size: 19px;
+
+    transition: transform .25s ease;
+}
+
+.result-button:hover {
+    transform: translateY(-3px);
+
+    background: #fbbf24;
+
+    box-shadow:
+        0 12px 30px rgba(245,158,11,.18);
+}
+
+.result-button:hover b {
+    transform: translateX(5px);
+}
+
+.result-secondary {
+    min-width: 170px;
+
+    padding: 14px 22px;
+
+    color: #b8c0cc;
+
+    background: transparent;
+
+    border: 1px solid #343d4b;
+}
+
+.result-secondary:hover {
+    color: #ffffff;
+
+    border-color: #687383;
+
+    background: rgba(255,255,255,.04);
+
+    transform: translateY(-3px);
+}
+
+/* =====================================================
+   CASE ID
+===================================================== */
+
+.result-case-id {
+    margin-top: 35px;
+
+    color: #596474;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes resultEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes iconAppear {
+    from {
+        opacity: 0;
+        transform: scale(.5) rotate(-10deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes statusPulse {
+    0%,
+    100% {
+        opacity: .5;
+        transform: scale(.9);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .result-navbar {
+        height: auto;
+        min-height: 70px;
+
+        padding: 15px 20px;
+    }
+
+    .result-brand-name {
+        font-size: 14px;
+    }
+
+    .result-brand-logo {
+        width: 36px;
+        height: 36px;
+    }
+
+    .result-nav-links {
+        gap: 12px;
+    }
+
+    .result-nav-links a {
+        font-size: 9px;
+        letter-spacing: .5px;
+    }
+
+    .case-result-page {
+        padding: 45px 15px 70px;
+    }
+
+    .result-card {
+        padding: 40px 22px;
+    }
+
+    .result-card h1 {
+        font-size: 38px;
+        letter-spacing: -1px;
+    }
+
+    .result-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .result-stat {
+        display: flex;
+
+        justify-content: space-between;
+        align-items: center;
+
+        text-align: left;
+    }
+
+    .result-stat-label {
+        margin-bottom: 0;
+    }
+
+    .result-actions {
+        flex-direction: column;
+    }
+
+    .result-button,
+    .result-secondary {
+        width: 100%;
+    }
+}
+
+/* =====================================================
+   REDUCED MOTION
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .result-card,
+    .result-icon,
+    .result-status-dot {
+        animation: none;
+    }
+
+    .result-stat,
+    .result-button,
+    .result-button b,
+    .result-secondary {
+        transition: none;
+    }
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- =================================================
+         STANDALONE NAVBAR
+    ================================================= -->
+
+    <nav class="result-navbar">
+
+        <a
+            href="{{ url_for('cases') }}"
+            class="result-brand"
+        >
+
+            <img
+                src="{{ url_for('static', filename='images/logo.png') }}"
+                alt="Clue Protocol Logo"
+                class="result-brand-logo"
+            >
+
+            <span class="result-brand-name">
+                CLUE <span>PROTOCOL</span>
+            </span>
+
+        </a>
+
+        <div class="result-nav-links">
+
+            <a href="{{ url_for('cases') }}">
+                Case Files
+            </a>
+
+            <a href="{{ url_for('investigation') }}">
+                Investigation
+            </a>
+
+        </div>
+
+    </nav>
+
+    <!-- =================================================
+         CASE RESULT
+    ================================================= -->
+
+    <main>
+
+        <section class="case-result-page">
+
+            <div
+                class="result-card
+                {% if result == 'success' %}
+                    success
+                {% else %}
+                    failure
+                {% endif %}"
+            >
+
+                <!-- STATUS -->
+
+                <div class="result-status">
+
+                    <span class="result-status-dot"></span>
+
+                    {% if result == "success" %}
+                        CASE RESOLVED
+                    {% else %}
+                        INVESTIGATION INCOMPLETE
+                    {% endif %}
+
+                </div>
+
+                <!-- ICON -->
+
+                <div class="result-icon">
+
+                    {% if result == "success" %}
+                        ✓
+                    {% else %}
+                        !
+                    {% endif %}
+
+                </div>
+
+                <!-- HEADING -->
+
+                <p class="result-tag">
+                    FINAL INVESTIGATION REPORT
+                </p>
+
+                {% if result == "success" %}
+
+                    <h1>
+                        CASE
+                        <span>SOLVED.</span>
+                    </h1>
+
+                    <p class="result-description">
+                        Excellent work, Detective.
+                        Your conclusion matches the evidence
+                        and the investigation has successfully
+                        identified the person responsible.
+                    </p>
+
+                {% else %}
+
+                    <h1>
+                        CASE
+                        <span>UNSOLVED.</span>
+                    </h1>
+
+                    <p class="result-description">
+                        Your accusation does not match the
+                        available evidence. Re-examine the data,
+                        investigate the clues, and look for
+                        patterns you may have missed.
+                    </p>
+
+                {% endif %}
+
+                <div class="result-divider"></div>
+
+                <!-- SCORE -->
+
+                <div class="result-stats">
+
+                    <div class="result-stat score-stat">
+
+                        <span class="result-stat-label">
+                            TOTAL SCORE
+                        </span>
+
+                        <strong class="result-stat-value">
+                            {{ game.score }}
+                        </strong>
+
+                    </div>
+
+                    <div class="result-stat">
+
+                        <span class="result-stat-label">
+                            EXPERIENCE
+                        </span>
+
+                        <strong class="result-stat-value">
+                            {{ game.xp }}
+                        </strong>
+
+                    </div>
+
+                    <div class="result-stat">
+
+                        <span class="result-stat-label">
+                            ATTEMPTS LEFT
+                        </span>
+
+                        <strong class="result-stat-value">
+                            {{ game.attempts }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- LEVEL -->
+
+                <div class="detective-level">
+
+                    <span class="detective-level-label">
+                        CURRENT DETECTIVE RANK
+                    </span>
+
+                    <strong>
+                        {{ level }}
+                    </strong>
+
+                </div>
+
+                <!-- ACTIONS -->
+
+                <div class="result-actions">
+
+                    {% if result == "success" %}
+
+                        <a
+                            href="{{ url_for('cases') }}"
+                            class="result-button"
+                        >
+                            <span>CASE FILES</span>
+                            <b>→</b>
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{{ url_for('accuse') }}"
+                            class="result-button"
+                        >
+                            <span>RECONSIDER</span>
+                            <b>→</b>
+                        </a>
+
+                    {% endif %}
+
+                    <a
+                        href="{{ url_for('investigation') }}"
+                        class="result-secondary"
+                    >
+                        INVESTIGATION ROOM
+                    </a>
+
+                </div>
+
+                <!-- CASE ID -->
+
+                <div class="result-case-id">
+
+                    CLUE PROTOCOL •
+                    CASE {{ case.id if case else "UNKNOWN" }}
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

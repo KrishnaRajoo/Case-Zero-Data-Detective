@@ -1,0 +1,1443 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   DATA DETECTIVE — CASE FILES
+========================================= */
+
+.cases-page {
+    min-height: calc(100vh - 70px);
+    padding: 70px 7% 90px;
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 85% 10%,
+            rgba(255, 180, 80, 0.08),
+            transparent 30%
+        ),
+        #0b0d12;
+}
+
+/* Background grid */
+
+.cases-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 40px 40px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent 90%
+    );
+
+    pointer-events: none;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.cases-header {
+    position: relative;
+    max-width: 850px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+.cases-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 18px;
+
+    color: #e7a85b;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+}
+
+.cases-kicker::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #e7a85b;
+
+    box-shadow: 0 0 10px rgba(231,168,91,0.8);
+    animation: pulse 1.8s infinite;
+}
+
+.cases-header h1 {
+    margin: 0;
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1;
+    letter-spacing: -2px;
+    color: #f4f1ea;
+}
+
+.cases-header h1 span {
+    color: #e7a85b;
+}
+
+.cases-header p {
+    max-width: 650px;
+    margin: 22px auto 0;
+
+    color: #9298a6;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* =========================================
+   COMMAND BAR
+========================================= */
+
+.case-command-bar {
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    padding: 15px 20px;
+
+    background: rgba(20,22,28,0.85);
+    border: 1px solid #292d36;
+    backdrop-filter: blur(10px);
+}
+
+.command-left,
+.command-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.command-label {
+    color: #676d79;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+}
+
+.command-value {
+    color: #d8dce4;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.command-status {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #82c99b;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.command-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #82c99b;
+    box-shadow: 0 0 8px rgba(130,201,155,0.7);
+}
+
+/* =========================================
+   CASE GRID
+========================================= */
+
+.case-grid {
+    position: relative;
+
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* =========================================
+   CASE CARD
+========================================= */
+
+.case-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 390px;
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(28,30,36,0.98),
+            rgba(17,19,24,0.98)
+        );
+
+    border: 1px solid #2a2e37;
+    overflow: hidden;
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+}
+
+/* =========================================
+   AVAILABLE CARD
+========================================= */
+
+.case-card.available::before {
+    content: "";
+
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    top: -100px;
+    right: -100px;
+
+    border-radius: 50%;
+    background: rgba(231,168,91,0.09);
+    filter: blur(20px);
+
+    transition: transform .5s ease;
+}
+
+.case-card.available::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 2px;
+    background: #e7a85b;
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition: transform .35s ease;
+}
+
+.case-card.available:hover {
+    transform: translateY(-7px);
+    border-color: rgba(231,168,91,0.55);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.35),
+        0 0 25px rgba(231,168,91,0.06);
+}
+
+.case-card.available:hover::before {
+    transform: scale(1.4);
+}
+
+.case-card.available:hover::after {
+    transform: scaleX(1);
+}
+
+/* =========================================
+   LOCKED CARD
+========================================= */
+
+.case-card.locked {
+    opacity: .55;
+    border-color: #252830;
+    filter: saturate(.45);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22,24,29,.96),
+            rgba(13,15,19,.96)
+        );
+}
+
+.case-card.locked::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 10px,
+            rgba(255,255,255,.012) 10px,
+            rgba(255,255,255,.012) 11px
+        );
+
+    pointer-events: none;
+}
+
+/* =========================================
+   SOLVED CARD
+========================================= */
+
+.case-card.solved {
+    border-color: rgba(100,190,130,.3);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24,34,29,.98),
+            rgba(15,21,18,.98)
+        );
+}
+
+.case-card.solved::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 2px;
+    background: #69b989;
+}
+
+/* =========================================
+   MASTER CASE — CASE 4
+========================================= */
+
+.case-card.master-case {
+    grid-column: span 3;
+
+    min-height: 470px;
+    padding: 36px;
+
+    border: 1px solid rgba(212,175,55,0.7);
+
+    background:
+        radial-gradient(
+            circle at 92% 8%,
+            rgba(212,175,55,0.18),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 5% 95%,
+            rgba(124,58,237,0.18),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(39,31,25,0.98),
+            rgba(22,20,25,0.98) 55%,
+            rgba(18,20,28,0.98)
+        );
+
+    box-shadow:
+        0 0 0 1px rgba(212,175,55,0.08),
+        0 18px 60px rgba(124,58,237,0.14);
+}
+
+.case-card.master-case.available:hover {
+    border-color: #f4d477;
+
+    box-shadow:
+        0 24px 65px rgba(0,0,0,0.4),
+        0 0 35px rgba(212,175,55,0.13);
+}
+
+.case-card.master-case.solved {
+    border-color: rgba(105,185,137,0.65);
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(105,185,137,0.13),
+            transparent 30%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(24,40,31,0.98),
+            rgba(15,25,20,0.98)
+        );
+}
+
+.master-ribbon {
+    position: absolute;
+    top: 22px;
+    right: -42px;
+    z-index: 4;
+
+    width: 185px;
+    padding: 9px 0;
+
+    text-align: center;
+
+    color: #241707;
+    background: linear-gradient(
+        90deg,
+        #b8892d,
+        #f8df91,
+        #c79a35
+    );
+
+    box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+
+    transform: rotate(42deg);
+}
+
+.master-ribbon span {
+    margin-right: 5px;
+}
+
+.master-case .case-number {
+    color: #f4d477;
+}
+
+.master-case .case-icon {
+    width: 68px;
+    height: 68px;
+
+    color: #f4d477;
+    background: rgba(212,175,55,0.12);
+    border-color: rgba(212,175,55,0.45);
+
+    font-size: 27px;
+}
+
+.master-case .case-card-content {
+    max-width: 850px;
+}
+
+.master-case h2 {
+    color: #f7e4a3;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: -1px;
+}
+
+.master-subtitle {
+    position: relative;
+    z-index: 1;
+
+    margin: -4px 0 15px;
+
+    color: #d8b85b !important;
+    font-size: 11px !important;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.master-description {
+    max-width: 850px;
+}
+
+.master-tags {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+
+    margin-top: 22px;
+}
+
+.master-tags span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    color: #e8d28b;
+    background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.28);
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .3px;
+}
+
+.master-tags i {
+    color: #f4d477;
+}
+
+.master-warning {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-top: 20px;
+    padding: 11px 13px;
+
+    border-left: 3px solid #c79a35;
+    background: rgba(212,175,55,0.07);
+
+    color: #d8c58e;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+}
+
+.master-warning i {
+    color: #f4d477;
+}
+
+/* =========================================
+   CARD TOP
+========================================= */
+
+.case-top {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 35px;
+}
+
+.case-number {
+    color: #656b77;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.case-status {
+    padding: 6px 9px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.case-status.open {
+    border: 1px solid #39402f;
+    color: #9bc7a6;
+    background: rgba(120,180,130,0.05);
+}
+
+.case-status.locked {
+    border: 1px solid #3a3d44;
+    color: #777d88;
+    background: rgba(255,255,255,.025);
+}
+
+.case-status.solved {
+    border: 1px solid rgba(105,185,137,.35);
+    color: #78c995;
+    background: rgba(105,185,137,.06);
+}
+
+.case-status.master {
+    border: 1px solid rgba(212,175,55,0.55);
+    color: #f8df91;
+    background: rgba(212,175,55,0.12);
+}
+
+/* =========================================
+   ICON
+========================================= */
+
+.case-icon {
+    position: relative;
+    z-index: 1;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 25px;
+
+    background: #24262d;
+    border: 1px solid #363a44;
+    color: #e7a85b;
+
+    font-size: 20px;
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+}
+
+.case-card.available:hover .case-icon {
+    transform: rotate(-4deg) scale(1.05);
+    background: rgba(231,168,91,0.09);
+}
+
+.case-card.locked .case-icon {
+    color: #5e636d;
+    background: #1b1d22;
+    border-color: #292c33;
+}
+
+.case-card.solved .case-icon {
+    color: #72c48e;
+    background: rgba(105,185,137,.07);
+    border-color: rgba(105,185,137,.25);
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.case-card h2 {
+    position: relative;
+    z-index: 1;
+
+    margin: 0 0 12px;
+
+    color: #f1eee8;
+    font-size: 25px;
+    letter-spacing: -0.5px;
+}
+
+.case-card.locked h2 {
+    color: #9a9ea6;
+}
+
+.case-card p {
+    position: relative;
+    z-index: 1;
+
+    margin: 0;
+
+    color: #858b98;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* =========================================
+   LOCK MESSAGE
+========================================= */
+
+.lock-message {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin-top: 18px;
+    padding: 10px 12px;
+
+    border: 1px solid #30343c;
+    background: rgba(0,0,0,.18);
+
+    color: #777d87;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .8px;
+}
+
+.lock-message-icon {
+    font-size: 13px;
+    color: #a07843;
+}
+
+/* =========================================
+   METADATA
+========================================= */
+
+.case-meta {
+    position: relative;
+    z-index: 1;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    margin-top: auto;
+    padding-top: 28px;
+}
+
+.case-meta-item {
+    padding: 12px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid #292d35;
+}
+
+.case-meta-item span {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #626874;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+}
+
+.case-meta-item strong {
+    color: #cdd1d8;
+    font-size: 12px;
+}
+
+.master-case .case-meta-item {
+    background: rgba(212,175,55,0.055);
+    border-color: rgba(212,175,55,0.20);
+}
+
+.master-case .case-meta-item strong {
+    color: #ead594;
+}
+
+/* =========================================
+   BUTTON
+========================================= */
+
+.case-button {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    margin-top: 15px;
+    padding: 14px 16px;
+
+    background: #e7a85b;
+    color: #15130f;
+
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+}
+
+.case-button span:last-child {
+    font-size: 18px;
+    transition: transform .25s ease;
+}
+
+.case-button:hover {
+    background: #f1bb73;
+    transform: translateY(-2px);
+}
+
+.case-button:hover span:last-child {
+    transform: translateX(5px);
+}
+
+.master-button {
+    color: #241707;
+    background: linear-gradient(
+        135deg,
+        #c79a35,
+        #f4d477
+    );
+}
+
+.master-button:hover {
+    background: linear-gradient(
+        135deg,
+        #f4d477,
+        #c79a35
+    );
+}
+
+/* =========================================
+   LOCKED BUTTON
+========================================= */
+
+.case-button.disabled {
+    display: flex;
+    cursor: not-allowed;
+
+    background: #24272d;
+    border: 1px solid #30343c;
+    color: #666c76;
+
+    pointer-events: none;
+}
+
+.case-button.disabled span:last-child {
+    color: #555b65;
+}
+
+/* =========================================
+   SOLVED BUTTON
+========================================= */
+
+.case-button.solved-button {
+    background: #263a2e;
+    border: 1px solid rgba(105,185,137,.3);
+    color: #82c99b;
+}
+
+.case-button.solved-button:hover {
+    background: #304936;
+}
+
+/* =========================================
+   WARNING
+========================================= */
+
+.case-warning {
+    max-width: 1200px;
+    margin: 35px auto 0;
+    padding: 16px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border-left: 2px solid #8b5f32;
+    background: rgba(139,95,50,0.06);
+
+    color: #858b96;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.case-warning strong {
+    color: #c9a36e;
+}
+
+/* =========================================
+   PROGRESSION MESSAGE
+========================================= */
+
+.case-progression {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 14px 18px;
+
+    border: 1px solid #292d35;
+    background: rgba(255,255,255,.018);
+
+    color: #737985;
+    font-size: 10px;
+    letter-spacing: .8px;
+    text-align: center;
+}
+
+.case-progression strong {
+    color: #d5d8de;
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: .4;
+        transform: scale(.7);
+    }
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .case-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-card.master-case {
+        grid-column: span 2;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .cases-page {
+        padding: 50px 5% 70px;
+    }
+
+    .cases-header {
+        margin-bottom: 40px;
+    }
+
+    .cases-header h1 {
+        font-size: 42px;
+    }
+
+    .case-command-bar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .command-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .case-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .case-card {
+        min-height: 360px;
+    }
+
+    .case-card.master-case {
+        grid-column: span 1;
+        min-height: 440px;
+        padding: 25px;
+    }
+
+    .master-ribbon {
+        top: 15px;
+        right: -48px;
+        width: 170px;
+        font-size: 8px;
+    }
+
+    .master-case h2 {
+        font-size: 30px;
+        padding-right: 25px;
+    }
+
+}
+
+@media (max-width: 450px) {
+
+    .cases-page {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .case-card {
+        padding: 22px;
+    }
+
+    .case-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .master-case {
+        padding: 22px !important;
+    }
+
+    .master-tags span {
+        font-size: 9px;
+    }
+
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+
+}
+
+</style>
+
+<section class="cases-page">
+
+    <!-- HEADER -->
+
+    <div class="cases-header">
+
+        <div class="cases-kicker">
+            CASE MANAGEMENT SYSTEM
+        </div>
+
+        <h1>
+            SELECT YOUR
+            <span>CASE.</span>
+        </h1>
+
+        <p>
+            Every investigation begins with a question.
+            Solve each case in sequence, examine the evidence,
+            and use the data to uncover what really happened.
+        </p>
+
+    </div>
+
+    <!-- COMMAND BAR -->
+
+    <div class="case-command-bar">
+
+        <div class="command-left">
+
+            <span class="command-label">
+                DATABASE
+            </span>
+
+            <span class="command-value">
+                INVESTIGATION_FILES
+            </span>
+
+        </div>
+
+        <div class="command-right">
+
+            <span class="command-label">
+                CASE PROGRESSION
+            </span>
+
+            <span class="command-value">
+                {% set completed_cases = session.get("completed_cases", []) %}
+
+                {{ completed_cases|length }}
+                /
+                {{ cases|length }}
+            </span>
+
+            <span class="command-status">
+                SYSTEM READY
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- CASES -->
+
+    <div class="case-grid">
+
+        {% for case in cases %}
+
+            {% set is_completed =
+                case.id in session.get("completed_cases", [])
+            %}
+
+            {% if loop.first %}
+
+                {% set is_unlocked = true %}
+
+            {% else %}
+
+                {% set previous_case =
+                    cases[loop.index0 - 1]
+                %}
+
+                {% set is_unlocked =
+                    previous_case.id
+                    in session.get("completed_cases", [])
+                %}
+
+            {% endif %}
+
+            {% set is_master = case.id == "case_004" %}
+
+            <article
+                class="case-card
+                {% if is_master %}master-case{% endif %}
+                {% if is_completed %}
+                    solved
+                {% elif is_unlocked %}
+                    available
+                {% else %}
+                    locked
+                {% endif %}"
+            >
+
+                {% if is_master %}
+
+                    <div class="master-ribbon">
+                        <span>★</span>
+                        MASTER CASE
+                    </div>
+
+                {% endif %}
+
+                <!-- CARD TOP -->
+
+                <div class="case-top">
+
+                    <span class="case-number">
+                        CASE_{{ "%02d"|format(loop.index) }}
+                    </span>
+
+                    {% if is_completed %}
+
+                        <span class="case-status solved">
+                            SOLVED
+                        </span>
+
+                    {% elif is_master %}
+
+                        <span class="case-status master">
+                            MASTER
+
+                        </span>
+
+                    {% elif is_unlocked %}
+
+                        <span class="case-status open">
+                            OPEN
+                        </span>
+
+                    {% else %}
+
+                        <span class="case-status locked">
+                            LOCKED
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- ICON -->
+
+                <div class="case-icon">
+
+                    {% if is_completed %}
+
+                        ✓
+
+                    {% elif is_master %}
+
+                        ♛
+
+                    {% elif is_unlocked %}
+
+                        ◈
+
+                    {% else %}
+
+                        🔒
+
+                    {% endif %}
+
+                </div>
+
+                <!-- CONTENT -->
+
+                <div class="case-card-content">
+
+                    <h2>
+                        {{ case.title }}
+                    </h2>
+
+                    {% if is_master %}
+
+                        <p class="master-subtitle">
+                            THE FINAL INVESTIGATION
+                        </p>
+
+                        <p class="master-description">
+                            A high-level conspiracy combining financial
+                            fraud, stolen research, manipulated records,
+                            and an internal cover-up. This is the ultimate
+                            test of your analytical and investigative skills.
+                        </p>
+
+                        <div class="master-tags">
+
+                            <span>
+                                ◈ Research Theft
+                            </span>
+
+                            <span>
+                                ₿ Financial Fraud
+                            </span>
+
+                            <span>
+                                ⌘ Multi-layered Evidence
+                            </span>
+
+                            <span>
+                                ⚠ Advanced Investigation
+                            </span>
+
+                        </div>
+
+                    {% else %}
+
+                        <p>
+                            {{ case.description }}
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+                <!-- LOCK MESSAGE -->
+
+                {% if not is_unlocked and not is_completed %}
+
+                    <div class="lock-message">
+
+                        <span class="lock-message-icon">
+                            🔒
+                        </span>
+
+                        <span>
+                            SOLVE CASE
+                            {{ "%02d"|format(loop.index0) }}
+                            FIRST
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+                {% if is_master and not is_unlocked and not is_completed %}
+
+                    <div class="master-warning">
+
+                        <span>⚠</span>
+
+                        <span>
+                            Complete Cases 1–3 to unlock the Master Case.
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+                <!-- METADATA -->
+
+                <div class="case-meta">
+
+                    <div class="case-meta-item">
+
+                        <span>
+                            SUSPECTS
+                        </span>
+
+                        <strong>
+                            {{ case.suspects|length }}
+                        </strong>
+
+                    </div>
+
+                    <div class="case-meta-item">
+
+                        <span>
+                            CLUES
+                        </span>
+
+                        <strong>
+                            {{ case.clues|length }}
+                        </strong>
+
+                    </div>
+
+                    <div class="case-meta-item">
+
+                        <span>
+                            DIFFICULTY
+                        </span>
+
+                        <strong>
+                            {% if is_master %}
+                                MASTER
+                            {% else %}
+                                {{ case.difficulty }}
+                            {% endif %}
+                        </strong>
+
+                    </div>
+
+                    <div class="case-meta-item">
+
+                        <span>
+                            STATUS
+                        </span>
+
+                        <strong>
+
+                            {% if is_completed %}
+
+                                COMPLETED
+
+                            {% elif is_unlocked %}
+
+                                AVAILABLE
+
+                            {% else %}
+
+                                LOCKED
+
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <!-- ACTION -->
+
+                {% if is_completed %}
+
+                    <a
+                        class="case-button solved-button"
+                        href="{{ url_for('start_case', case_id=case.id) }}"
+                    >
+
+                        <span>
+                            REVIEW CASE
+                        </span>
+
+                        <span>
+                            ↗
+                        </span>
+
+                    </a>
+
+                {% elif is_unlocked %}
+
+                    <a
+                        class="case-button {% if is_master %}master-button{% endif %}"
+                        href="{{ url_for('start_case', case_id=case.id) }}"
+                    >
+
+                        <span>
+                            {% if is_master %}
+                                ENTER MASTER CASE
+                            {% else %}
+                                OPEN CASE FILE
+                            {% endif %}
+                        </span>
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+                {% else %}
+
+                    <div class="case-button disabled">
+
+                        <span>
+                            CASE LOCKED
+                        </span>
+
+                        <span>
+                            🔒
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </article>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- PROGRESSION -->
+
+    {% set completed_count =
+        session.get("completed_cases", [])|length
+    %}
+
+    <div class="case-progression">
+
+        {% if completed_count == 0 %}
+
+            <strong>
+                CASE 01
+            </strong>
+            is currently active.
+            Solve it to unlock the next investigation.
+
+        {% elif completed_count < cases|length %}
+
+            <strong>
+                {{ completed_count }}
+                case{% if completed_count != 1 %}s{% endif %}
+                solved
+            </strong>
+            —
+            continue with the next unlocked investigation.
+
+        {% else %}
+
+            <strong>
+                ALL CASES SOLVED
+            </strong>
+            —
+            outstanding detective work complete.
+
+        {% endif %}
+
+    </div>
+
+    <!-- WARNING -->
+
+    <div class="case-warning">
+
+        <span>⚠</span>
+
+        <span>
+
+            <strong>Detective's note:</strong>
+
+            Cases must be solved in sequence.
+            The next investigation becomes available only
+            after the current case has been successfully solved.
+
+        </span>
+
+    </div>
+
+</section>
+
+{% endblock %}

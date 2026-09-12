@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Case Zero — Data Detective
+        {% endblock %}
+    </title>
+
+    <link rel="icon" href="static\images\logo.png" type="image/png">
+
+    <meta
+        name="description"
+        content="Data Detective — an AI-powered data investigation game."
+    >
+
+    <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                #0b0b0c;
+
+            color:
+                #eee9df;
+
+            line-height:
+                1.5;
+
+            overflow-x:
+                hidden;
+
+            position:
+                relative;
+        }
+
+
+        /* =========================================================
+           FORENSIC BACKGROUND
+        ========================================================= */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: -2;
+
+            background-image:
+
+                linear-gradient(
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                ),
+
+                linear-gradient(
+                    90deg,
+                    rgba(255,255,255,0.025) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                32px 32px;
+
+            opacity:
+                .45;
+        }
+
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 600px;
+            height: 600px;
+
+            top: -220px;
+            right: -180px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(238,153,62,.10),
+                    transparent 68%
+                );
+
+            pointer-events:
+                none;
+
+            z-index:
+                -1;
+        }
+
+
+        /* =========================================================
+           VARIABLES
+        ========================================================= */
+
+        :root {
+
+            --bg:
+                #0b0b0c;
+
+            --bg-soft:
+                #111113;
+
+            --panel:
+                #151518;
+
+            --panel-light:
+                #1a1a1d;
+
+            --border:
+                #2b2b2f;
+
+            --border-light:
+                #39393e;
+
+            --text:
+                #eee9df;
+
+            --muted:
+                #99979a;
+
+            --dim:
+                #66656a;
+
+            --orange:
+                #f2a04a;
+
+            --orange-light:
+                #ffb866;
+
+            --green:
+                #67c89a;
+
+            --red:
+                #e76f67;
+
+            --shadow:
+                0 20px 50px rgba(0,0,0,.35);
+        }
+
+
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
+
+        .site-nav {
+
+            position:
+                sticky;
+
+            top:
+                0;
+
+            z-index:
+                100;
+
+            height:
+                72px;
+
+            padding:
+                0 5vw;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            border-bottom:
+                1px solid rgba(255,255,255,.08);
+
+            background:
+                rgba(11,11,12,.88);
+
+            backdrop-filter:
+                blur(16px);
+
+            -webkit-backdrop-filter:
+                blur(16px);
+        }
+
+
+        .nav-logo {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                11px;
+
+            color:
+                var(--text);
+
+            text-decoration:
+                none;
+
+            font-size:
+                15px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                2px;
+
+            transition:
+                color .25s ease;
+        }
+
+
+        .nav-logo:hover {
+            color:
+                var(--orange);
+        }
+
+
+        .nav-mark {
+
+            width:
+                30px;
+
+            height:
+                30px;
+
+            display:
+                grid;
+
+            place-items:
+                center;
+
+            border:
+                1px solid var(--border-light);
+
+            background:
+                var(--panel);
+
+            color:
+                var(--orange);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .nav-logo:hover .nav-mark {
+
+            border-color:
+                var(--orange);
+
+            transform:
+                rotate(5deg);
+        }
+
+
+        .nav-links {
+
+            margin-left:
+                auto;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                26px;
+        }
+
+
+        .nav-links a {
+
+            position:
+                relative;
+
+            color:
+                #aaa8aa;
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                1.2px;
+
+            text-transform:
+                uppercase;
+
+            transition:
+                color .25s ease;
+        }
+
+
+        .nav-links a::after {
+
+            content:
+                "";
+
+            position:
+                absolute;
+
+            left:
+                0;
+
+            bottom:
+                -8px;
+
+            width:
+                0;
+
+            height:
+                1px;
+
+            background:
+                var(--orange);
+
+            transition:
+                width .25s ease;
+        }
+
+
+        .nav-links a:hover {
+
+            color:
+                var(--text);
+        }
+
+
+        .nav-links a:hover::after {
+
+            width:
+                100%;
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        main {
+            min-height:
+                calc(100vh - 72px);
+        }
+
+
+        /* =========================================================
+           GLOBAL CONTAINER
+        ========================================================= */
+
+        .container {
+
+            width:
+                min(1180px, 90%);
+
+            margin:
+                0 auto;
+
+            padding:
+                65px 0;
+        }
+
+
+        /* =========================================================
+           TYPOGRAPHY
+        ========================================================= */
+
+        h1,
+        h2,
+        h3,
+        h4 {
+
+            color:
+                var(--text);
+
+            line-height:
+                1.1;
+        }
+
+
+        h1 {
+            font-size:
+                clamp(38px, 6vw, 76px);
+        }
+
+
+        h2 {
+            font-size:
+                clamp(28px, 4vw, 46px);
+        }
+
+
+        h3 {
+            font-size:
+                19px;
+        }
+
+
+        p {
+            color:
+                var(--muted);
+        }
+
+
+        .tag {
+
+            color:
+                var(--orange) !important;
+
+            font-size:
+                11px !important;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                3px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =========================================================
+           BUTTON
+        ========================================================= */
+
+        .button {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            gap:
+                22px;
+
+            min-height:
+                52px;
+
+            padding:
+                0 23px;
+
+            background:
+                var(--orange);
+
+            color:
+                #111;
+
+            border:
+                1px solid var(--orange);
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                1.4px;
+
+            text-transform:
+                uppercase;
+
+            cursor:
+                pointer;
+
+            transition:
+                transform .25s ease,
+                background .25s ease,
+                box-shadow .25s ease;
+        }
+
+
+        .button:hover {
+
+            background:
+                var(--orange-light);
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 12px 30px rgba(242,160,74,.18);
+        }
+
+
+        .button b {
+
+            font-size:
+                18px;
+
+            font-weight:
+                400;
+        }
+
+
+        /* =========================================================
+           SECONDARY BUTTON
+        ========================================================= */
+
+        .hero-secondary-button {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-height:
+                52px;
+
+            padding:
+                0 22px;
+
+            color:
+                #c3c0bd;
+
+            border:
+                1px solid var(--border-light);
+
+            text-decoration:
+                none;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                1.4px;
+
+            transition:
+                .25s ease;
+        }
+
+
+        .hero-secondary-button:hover {
+
+            color:
+                var(--orange);
+
+            border-color:
+                var(--orange);
+
+            background:
+                rgba(242,160,74,.04);
+        }
+
+
+        /* =========================================================
+           PANELS
+        ========================================================= */
+
+        .panel {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #18181b,
+                    #111113
+                );
+
+            border:
+                1px solid var(--border);
+
+            box-shadow:
+                var(--shadow);
+
+            transition:
+                border-color .25s ease,
+                transform .25s ease;
+        }
+
+
+        .panel:hover {
+
+            border-color:
+                var(--border-light);
+        }
+
+
+        /* =========================================================
+           STATUS
+        ========================================================= */
+
+        .status-dot {
+
+            width:
+                7px;
+
+            height:
+                7px;
+
+            border-radius:
+                50%;
+
+            background:
+                var(--green);
+
+            box-shadow:
+                0 0 12px rgba(103,200,154,.65);
+
+            animation:
+                statusPulse 2s infinite;
+        }
+
+
+        @keyframes statusPulse {
+
+            0%,
+            100% {
+                opacity:
+                    1;
+
+                box-shadow:
+                    0 0 10px rgba(103,200,154,.5);
+            }
+
+            50% {
+                opacity:
+                    .55;
+
+                box-shadow:
+                    0 0 3px rgba(103,200,154,.2);
+            }
+        }
+
+
+        /* =========================================================
+           FLASH MESSAGES
+        ========================================================= */
+
+        .flash-container {
+
+            position:
+                fixed;
+
+            top:
+                88px;
+
+            right:
+                25px;
+
+            z-index:
+                200;
+
+            width:
+                min(360px, 90vw);
+        }
+
+
+        .flash {
+
+            padding:
+                14px 18px;
+
+            margin-bottom:
+                10px;
+
+            background:
+                #171719;
+
+            border:
+                1px solid var(--border);
+
+            border-left:
+                3px solid var(--orange);
+
+            color:
+                #d8d5d1;
+
+            font-size:
+                13px;
+
+            box-shadow:
+                var(--shadow);
+
+            animation:
+                flashIn .4s ease;
+        }
+
+
+        @keyframes flashIn {
+
+            from {
+                opacity:
+                    0;
+
+                transform:
+                    translateX(25px);
+            }
+
+            to {
+                opacity:
+                    1;
+
+                transform:
+                    translateX(0);
+            }
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .site-footer {
+
+            padding:
+                30px 5vw;
+
+            border-top:
+                1px solid rgba(255,255,255,.07);
+
+            background:
+                #09090a;
+
+            display:
+                flex;
+
+            justify-content:
+                space-between;
+
+            align-items:
+                center;
+
+            gap:
+                20px;
+        }
+
+
+        .site-footer p {
+
+            font-size:
+                11px;
+
+            color:
+                var(--dim);
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .footer-status {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            color:
+                var(--dim);
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1.5px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        /* =========================================================
+           SELECTION
+        ========================================================= */
+
+        ::selection {
+
+            background:
+                var(--orange);
+
+            color:
+                #111;
+        }
+
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width:
+                8px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background:
+                #0a0a0b;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+
+            background:
+                #333337;
+
+            border-radius:
+                10px;
+        }
+
+
+        ::-webkit-scrollbar-thumb:hover {
+
+            background:
+                var(--orange);
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 850px) {
+
+            .site-nav {
+
+                height:
+                    65px;
+
+                padding:
+                    0 6%;
+            }
+
+
+            .nav-links {
+
+                gap:
+                    15px;
+            }
+
+
+            .nav-links a {
+
+                font-size:
+                    10px;
+            }
+
+
+            .container {
+
+                width:
+                    88%;
+
+                padding:
+                    50px 0;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .site-nav {
+
+                padding:
+                    0 5%;
+            }
+
+
+            .nav-logo span:last-child {
+
+                display:
+                    none;
+            }
+
+
+            .nav-links {
+
+                gap:
+                    12px;
+            }
+
+
+            .nav-links a {
+
+                font-size:
+                    9px;
+
+                letter-spacing:
+                    .8px;
+            }
+
+
+            .container {
+
+                width:
+                    90%;
+
+                padding:
+                    40px 0;
+            }
+
+
+            .site-footer {
+
+                flex-direction:
+                    column;
+
+                align-items:
+                    flex-start;
+            }
+
+        }
+
+
+        @media (max-width: 430px) {
+
+            .nav-links a:nth-child(n+4) {
+                display:
+                    none;
+            }
+
+        }
+
+    </style>
+
+    {% block extra_head %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<nav class="site-nav">
+
+    <a
+        href="{{ url_for('index') }}"
+        class="nav-logo"
+    >
+
+        <img src="static/images/logo.png" alt="Data Detective Logo" width="40" height="40">
+
+        <span>
+            CASE ZERO
+        </span>
+
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="{{ url_for('index') }}">
+            Home
+        </a>
+
+        <a href="{{ url_for('cases') }}">
+            Cases
+        </a>
+
+        <a href="{{ url_for('investigation') }}">
+            Investigation
+        </a>
+
+        <a href="{{ url_for('analysis') }}">
+            Analysis
+        </a>
+
+        <a href="{{ url_for('timeline') }}">
+            Timeline
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================================
+     FLASH MESSAGES
+========================================================= -->
+
+{% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+
+        <div class="flash-container">
+
+            {% for message in messages %}
+
+                <div class="flash">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+
+<!-- =========================================================
+     PAGE CONTENT
+========================================================= -->
+
+<main>
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="site-footer">
+
+    <p>
+        DATA DETECTIVE // INVESTIGATION SYSTEM
+    </p>
+
+    <div class="footer-status">
+
+        <span class="status-dot"></span>
+
+        SYSTEM ONLINE
+
+    </div>
+
+</footer>
+
+
+{% block scripts %}
+{% endblock %}
+
+
+</body>
+
+</html>

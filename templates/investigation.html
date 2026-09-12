@@ -1,0 +1,917 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =====================================================
+   DATA DETECTIVE — INVESTIGATION ROOM
+===================================================== */
+
+:root {
+    --bg: #090b0f;
+    --panel: #11151b;
+    --panel-2: #171c23;
+    --border: #2a3038;
+
+    --text: #f1f1ec;
+    --muted: #8f969f;
+
+    --accent: #d6ff3f;
+    --accent-dark: #8da91f;
+
+    --danger: #ff5c5c;
+    --warning: #ffb84d;
+    --success: #6ee7a8;
+
+    --shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.investigation-page {
+    width: min(1400px, 92%);
+    margin: 0 auto;
+    padding: 45px 0 80px;
+    color: var(--text);
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.investigation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+
+.case-heading .eyebrow {
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.case-heading h1 {
+    margin: 0;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.case-heading p {
+    margin-top: 14px;
+    max-width: 650px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   SCORE PANEL
+===================================================== */
+
+.investigation-score {
+    min-width: 180px;
+    padding: 18px 22px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.investigation-score span {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.investigation-score strong {
+    font-size: 34px;
+    color: var(--accent);
+}
+
+
+/* =====================================================
+   CASE BRIEF
+===================================================== */
+
+.case-brief {
+    position: relative;
+    overflow: hidden;
+
+    padding: 30px;
+    margin-bottom: 35px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(214,255,63,.06),
+            transparent 45%
+        ),
+        var(--panel);
+
+    border: 1px solid var(--border);
+}
+
+.case-brief::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent);
+}
+
+.case-brief-label {
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.case-brief h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.case-brief p {
+    max-width: 900px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+
+/* =====================================================
+   INVESTIGATION NAV
+===================================================== */
+
+.investigation-tools {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 45px;
+}
+
+.tool-card {
+    position: relative;
+
+    padding: 18px;
+
+    text-decoration: none;
+    color: var(--text);
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
+
+.tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    background: var(--panel-2);
+}
+
+.tool-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.tool-card strong {
+    font-size: 14px;
+}
+
+.tool-card::after {
+    content: "↗";
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: var(--accent);
+}
+
+
+/* =====================================================
+   SECTION HEADING
+===================================================== */
+
+.investigation-section-heading {
+    margin-bottom: 22px;
+}
+
+.investigation-section-heading span {
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.investigation-section-heading h2 {
+    margin-top: 7px;
+    font-size: 28px;
+}
+
+
+/* =====================================================
+   CLUE GRID
+===================================================== */
+
+.clue-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+    margin-bottom: 55px;
+}
+
+
+/* =====================================================
+   CLUE CARD
+===================================================== */
+
+.clue-card {
+    position: relative;
+    min-height: 210px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 25px;
+
+    text-decoration: none;
+    color: var(--text);
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+
+    overflow: hidden;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.clue-card::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(214,255,63,.07),
+            transparent 55%
+        );
+
+    opacity: 0;
+
+    transition: opacity .3s ease;
+}
+
+.clue-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 15px 45px rgba(0,0,0,.35);
+}
+
+.clue-card:hover::before {
+    opacity: 1;
+}
+
+
+/* =====================================================
+   CLUE NUMBER
+===================================================== */
+
+.clue-number {
+    position: relative;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    background: #1b2114;
+    border: 1px solid #39451e;
+
+    color: var(--accent);
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   CLUE CONTENT
+===================================================== */
+
+.clue-card h3 {
+    position: relative;
+
+    margin-bottom: 9px;
+
+    font-size: 19px;
+}
+
+.clue-card p {
+    position: relative;
+
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   CLUE STATUS
+===================================================== */
+
+.clue-status {
+    position: relative;
+
+    margin-top: auto;
+    padding-top: 20px;
+
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.clue-status.locked {
+    color: var(--muted);
+}
+
+.clue-status.found {
+    color: var(--success);
+}
+
+
+/* =====================================================
+   FOUND CLUE
+===================================================== */
+
+.clue-card.found {
+    border-color: #4d6222;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(214,255,63,.07),
+            transparent 50%
+        ),
+        var(--panel);
+}
+
+
+/* =====================================================
+   SUSPECTS
+===================================================== */
+
+.suspect-section {
+    margin-bottom: 55px;
+}
+
+.suspect-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.suspect-card {
+    padding: 25px;
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease;
+}
+
+.suspect-card:hover {
+    transform: translateY(-4px);
+    border-color: #59616b;
+}
+
+.suspect-number {
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.suspect-card h3 {
+    margin: 10px 0 7px;
+    font-size: 20px;
+}
+
+.suspect-card p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.suspect-role {
+    display: inline-block;
+
+    margin-top: 18px;
+    padding: 6px 9px;
+
+    border: 1px solid var(--border);
+
+    color: #b5bbc2;
+
+    font-size: 9px;
+    letter-spacing: 1.5px;
+}
+
+
+/* =====================================================
+   FINAL ACCUSATION
+===================================================== */
+
+.accusation-panel {
+    position: relative;
+
+    padding: 35px;
+
+    background:
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(214,255,63,.08),
+            transparent 35%
+        ),
+        var(--panel);
+
+    border: 1px solid var(--border);
+
+    text-align: center;
+}
+
+.accusation-panel span {
+    color: var(--warning);
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.accusation-panel h2 {
+    margin: 10px 0;
+    font-size: 28px;
+}
+
+.accusation-panel p {
+    max-width: 600px;
+    margin: 0 auto 22px;
+
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.investigation-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+
+    padding: 14px 22px;
+
+    background: var(--accent);
+    color: #0a0d09;
+
+    text-decoration: none;
+
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+
+    border: none;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+}
+
+.investigation-button:hover {
+    transform: translateY(-3px);
+    background: #e5ff73;
+    box-shadow:
+        0 12px 35px rgba(214,255,63,.18);
+}
+
+.investigation-button b {
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   SCAN LINE ANIMATION
+===================================================== */
+
+.investigation-page::after {
+    content: "";
+
+    position: fixed;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background: rgba(214,255,63,.05);
+
+    pointer-events: none;
+
+    animation: scanLine 7s linear infinite;
+}
+
+@keyframes scanLine {
+
+    0% {
+        top: 10%;
+    }
+
+    50% {
+        top: 90%;
+    }
+
+    100% {
+        top: 10%;
+    }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .investigation-tools {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .clue-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .suspect-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .investigation-page {
+        width: 90%;
+        padding-top: 30px;
+    }
+
+    .investigation-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .investigation-score {
+        width: 100%;
+    }
+
+    .investigation-tools {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .clue-grid,
+    .suspect-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .case-brief {
+        padding: 24px;
+    }
+
+    .accusation-panel {
+        padding: 28px 20px;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .investigation-tools {
+        grid-template-columns: 1fr;
+    }
+
+    .case-heading h1 {
+        font-size: 36px;
+    }
+
+}
+
+</style>
+
+
+<div class="investigation-page">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header class="investigation-header">
+
+        <div class="case-heading">
+
+            <div class="eyebrow">
+                ACTIVE INVESTIGATION
+            </div>
+
+            <h1>
+                {{ case.title }}
+            </h1>
+
+            <p>
+                {{ case.description }}
+            </p>
+
+        </div>
+
+
+        <div class="investigation-score">
+
+            <span>
+                INVESTIGATION SCORE
+            </span>
+
+            <strong>
+                {{ score }}
+            </strong>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         CASE BRIEF
+    ========================================== -->
+
+    <section class="case-brief">
+
+        <div class="case-brief-label">
+            CASE BRIEF
+        </div>
+
+        <h2>
+            Evidence Analysis Required
+        </h2>
+
+        <p>
+            Examine every available clue before reaching a conclusion.
+            Your objective is to identify suspicious patterns, connect
+            evidence, and determine which suspect is responsible.
+        </p>
+
+    </section>
+
+
+    <!-- =========================================
+         INVESTIGATION TOOLS
+    ========================================== -->
+
+    <div class="investigation-tools">
+
+        <a
+            class="tool-card"
+            href="{{ url_for('analysis') }}"
+        >
+            <span>01 / DATA</span>
+            <strong>ANALYSIS</strong>
+        </a>
+
+
+        <a
+            class="tool-card"
+            href="{{ url_for('timeline') }}"
+        >
+            <span>02 / EVENTS</span>
+            <strong>TIMELINE</strong>
+        </a>
+
+
+        <a
+            class="tool-card"
+            href="{{ url_for('connections') }}"
+        >
+            <span>03 / LINKS</span>
+            <strong>CONNECTIONS</strong>
+        </a>
+
+
+        <a
+            class="tool-card"
+            href="{{ url_for('evidence_board') }}"
+        >
+            <span>04 / THEORY</span>
+            <strong>EVIDENCE BOARD</strong>
+        </a>
+
+
+        <a
+            class="tool-card"
+            href="{{ url_for('intelligence') }}"
+        >
+            <span>05 / AI</span>
+            <strong>INTELLIGENCE</strong>
+        </a>
+
+    </div>
+
+
+    <!-- =========================================
+         CLUES
+    ========================================== -->
+
+    <section>
+
+        <div class="investigation-section-heading">
+
+            <span>
+                EVIDENCE DISCOVERED
+            </span>
+
+            <h2>
+                Investigate the clues
+            </h2>
+
+        </div>
+
+
+        <div class="clue-grid">
+
+            {% for clue in case.clues %}
+
+                {% set is_found = clue.id in found_clues %}
+
+                <a
+                    href="{{ url_for('investigate_clue', clue_id=clue.id) }}"
+                    class="clue-card {% if is_found %}found{% endif %}"
+                >
+
+                    <div class="clue-number">
+                        {{ "%02d" | format(loop.index) }}
+                    </div>
+
+                    <h3>
+                        {{ clue.title }}
+                    </h3>
+
+                    <p>
+                        {{ clue.description }}
+                    </p>
+
+                    {% if is_found %}
+
+                        <div class="clue-status found">
+                            ✓ CLUE INVESTIGATED
+                        </div>
+
+                    {% else %}
+
+                        <div class="clue-status locked">
+                            → INVESTIGATE CLUE
+                        </div>
+
+                    {% endif %}
+
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         SUSPECTS
+    ========================================== -->
+
+    <section class="suspect-section">
+
+        <div class="investigation-section-heading">
+
+            <span>
+                PERSONS OF INTEREST
+            </span>
+
+            <h2>
+                Suspect profiles
+            </h2>
+
+        </div>
+
+
+        <div class="suspect-grid">
+
+            {% for suspect in case.suspects %}
+
+                <article class="suspect-card">
+
+                    <div class="suspect-number">
+                        SUSPECT {{ "%02d" | format(loop.index) }}
+                    </div>
+
+                    <h3>
+                        {{ suspect.name }}
+                    </h3>
+
+                    <p>
+                        {{ suspect.description }}
+                    </p>
+
+                    {% if suspect.role %}
+
+                        <span class="suspect-role">
+                            {{ suspect.role }}
+                        </span>
+
+                    {% endif %}
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         ACCUSATION
+    ========================================== -->
+
+    <section class="accusation-panel">
+
+        <span>
+            FINAL DECISION
+        </span>
+
+        <h2>
+            Think you know who did it?
+        </h2>
+
+        <p>
+            Review the evidence, analyze the data, and make your
+            accusation only when you are confident in your conclusion.
+        </p>
+
+        <a
+            href="{{ url_for('accuse') }}"
+            class="investigation-button"
+        >
+            <span>MAKE AN ACCUSATION</span>
+            <b>→</b>
+        </a>
+
+    </section>
+
+
+</div>
+
+{% endblock %}
+

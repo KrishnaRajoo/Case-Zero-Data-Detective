@@ -1,0 +1,1200 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================
+   DATA DETECTIVE — EVIDENCE BOARD
+========================================= */
+
+.evidence-page {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding: 50px 0 80px;
+    color: #eeeae0;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.evidence-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 35px;
+}
+
+.evidence-header .tag {
+    color: #c7a85a;
+    font-size: 10px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.evidence-header h1 {
+    margin: 0;
+    font-family: Georgia, serif;
+    font-size: clamp(34px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.evidence-header p {
+    max-width: 650px;
+    color: #919087;
+    line-height: 1.7;
+    margin-top: 15px;
+}
+
+/* CASE INFO */
+
+.evidence-case {
+    min-width: 170px;
+    padding: 15px 18px;
+    background: #12120f;
+    border: 1px solid #37362f;
+}
+
+.evidence-case span {
+    display: block;
+    color: #68675f;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 7px;
+}
+
+.evidence-case strong {
+    color: #c7a85a;
+    font-size: 13px;
+}
+
+/* =========================================
+   SCORE BAR
+========================================= */
+
+.evidence-status {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #35342e;
+    border: 1px solid #35342e;
+    margin-bottom: 25px;
+}
+
+.evidence-status-item {
+    padding: 20px;
+    background: #151512;
+}
+
+.evidence-status-item span {
+    display: block;
+    color: #696861;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.evidence-status-item strong {
+    color: #eeeae0;
+    font-size: 22px;
+}
+
+.evidence-status-item.score strong {
+    color: #c7a85a;
+}
+
+/* =========================================
+   BOARD LAYOUT
+========================================= */
+
+.board-layout {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+/* =========================================
+   EVIDENCE PANEL
+========================================= */
+
+.evidence-panel {
+    background: #141411;
+    border: 1px solid #35342e;
+    padding: 22px;
+}
+
+.evidence-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.evidence-panel-header h2 {
+    font-size: 17px;
+    margin: 0;
+}
+
+.evidence-count {
+    color: #c7a85a;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.evidence-panel > p {
+    color: #77766e;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   EVIDENCE CARDS
+========================================= */
+
+.evidence-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.evidence-card {
+    position: relative;
+
+    display: flex;
+    gap: 13px;
+
+    padding: 15px;
+
+    background: #1a1915;
+    border: 1px solid #34332c;
+
+    cursor: grab;
+
+    transition:
+        transform .22s ease,
+        border-color .22s ease,
+        background .22s ease,
+        box-shadow .22s ease;
+}
+
+.evidence-card:hover {
+    transform: translateX(4px);
+    border-color: #65572f;
+    background: #201e17;
+    box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+
+.evidence-card:active {
+    cursor: grabbing;
+    transform: scale(.98);
+}
+
+.evidence-number {
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #29271e;
+    border: 1px solid #50462d;
+
+    color: #c7a85a;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.evidence-card-content {
+    min-width: 0;
+}
+
+.evidence-card h3 {
+    color: #e5e1d7;
+    font-size: 13px;
+    margin: 0 0 6px;
+}
+
+.evidence-card p {
+    color: #7e7d75;
+    font-size: 11px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.evidence-card small {
+    display: block;
+    margin-top: 8px;
+
+    color: #5f5e58;
+    font-size: 8px;
+    letter-spacing: 1.5px;
+}
+
+/* =========================================
+   BOARD
+========================================= */
+
+.board-wrapper {
+    min-width: 0;
+}
+
+.board-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.board-label span:first-child {
+    color: #aaa79d;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.board-label span:last-child {
+    color: #62615b;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+}
+
+/* MAIN BOARD */
+
+.evidence-board {
+    position: relative;
+
+    min-height: 620px;
+    padding: 25px;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    gap: 16px;
+
+    overflow: hidden;
+
+    background-color: #11110f;
+
+    border: 1px solid #3b3a32;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 28px 28px;
+
+    transition:
+        border-color .25s ease,
+        background-color .25s ease;
+}
+
+.evidence-board.board-hover {
+    border-color: #c7a85a;
+
+    background-color: #15140f;
+}
+
+/* BOARD CORNERS */
+
+.evidence-board::before,
+.evidence-board::after {
+    content: "";
+    position: absolute;
+
+    width: 25px;
+    height: 25px;
+
+    pointer-events: none;
+}
+
+.evidence-board::before {
+    top: 12px;
+    left: 12px;
+
+    border-top: 1px solid #625531;
+    border-left: 1px solid #625531;
+}
+
+.evidence-board::after {
+    right: 12px;
+    bottom: 12px;
+
+    border-right: 1px solid #625531;
+    border-bottom: 1px solid #625531;
+}
+
+/* =========================================
+   EMPTY BOARD
+========================================= */
+
+.board-empty {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #56554f;
+
+    pointer-events: none;
+
+    text-align: center;
+}
+
+.board-empty-icon {
+    width: 64px;
+    height: 64px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px dashed #4a4941;
+    border-radius: 50%;
+
+    color: #8b7742;
+    font-size: 26px;
+
+    margin-bottom: 16px;
+}
+
+.board-empty strong {
+    color: #77756d;
+    font-size: 13px;
+}
+
+.board-empty p {
+    max-width: 280px;
+    margin-top: 7px;
+
+    color: #52514b;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* =========================================
+   BOARD CARDS
+========================================= */
+
+.board-card {
+    position: relative;
+
+    width: 250px;
+    min-height: 120px;
+
+    padding: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.035),
+            transparent
+        ),
+        #1c1b16;
+
+    border: 1px solid #64562f;
+
+    box-shadow:
+        0 12px 25px rgba(0,0,0,.28);
+
+    cursor: default;
+
+    animation: evidenceDrop .35s ease both;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.board-card:hover {
+    transform: translateY(-3px) rotate(.2deg);
+
+    box-shadow:
+        0 18px 30px rgba(0,0,0,.35);
+}
+
+.board-card::before {
+    content: "EVIDENCE";
+
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #9c8446;
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.board-card h3 {
+    font-size: 14px;
+    color: #e5e1d7;
+    margin-bottom: 7px;
+}
+
+.board-card p {
+    color: #88867d;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* PIN */
+
+.board-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: -5px;
+    left: 50%;
+
+    width: 10px;
+    height: 10px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: #b42f2f;
+
+    box-shadow:
+        0 2px 5px rgba(0,0,0,.5);
+}
+
+/* REMOVE */
+
+.remove-evidence {
+    position: absolute;
+
+    top: 8px;
+    right: 8px;
+
+    width: 23px;
+    height: 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #3f302b;
+    border-radius: 50%;
+
+    background: #201715;
+    color: #a56d60;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.remove-evidence:hover {
+    background: #44221d;
+    color: #e29a89;
+    transform: rotate(90deg);
+}
+
+/* =========================================
+   THEORY / ACTIONS
+========================================= */
+
+.board-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 18px;
+}
+
+.board-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    padding: 13px 19px;
+
+    text-decoration: none;
+
+    color: #aaa79c;
+
+    background: #151512;
+    border: 1px solid #38372f;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.board-action:hover {
+    transform: translateY(-2px);
+    border-color: #625531;
+    color: #eeeae0;
+    background: #201e17;
+}
+
+.board-action.primary {
+    background: #c7a85a;
+    border-color: #c7a85a;
+    color: #11110f;
+}
+
+.board-action.primary:hover {
+    background: #dfc578;
+    border-color: #dfc578;
+}
+
+/* =========================================
+   THEORY RESULT
+========================================= */
+
+.theory-result {
+    margin-top: 20px;
+}
+
+.theory-success,
+.theory-warning {
+    padding: 25px;
+
+    background: #151512;
+    border: 1px solid #39372f;
+}
+
+.theory-success {
+    border-left: 3px solid #6f9f76;
+}
+
+.theory-warning {
+    border-left: 3px solid #b48a4c;
+}
+
+.theory-success > span,
+.theory-warning > span {
+    color: #706f67;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.theory-success h2,
+.theory-warning h2 {
+    margin: 10px 0;
+    font-family: Georgia, serif;
+    font-weight: 500;
+}
+
+.theory-success p,
+.theory-warning p {
+    color: #929087;
+    line-height: 1.6;
+    font-size: 13px;
+}
+
+.theory-success strong {
+    display: block;
+    margin-top: 15px;
+    color: #91b798;
+    font-size: 20px;
+}
+
+.theory-warning h2 {
+    color: #c7a85a;
+}
+
+/* =========================================
+   TIP
+========================================= */
+
+.evidence-tip {
+    margin-top: 20px;
+
+    padding: 20px;
+
+    background: #151512;
+
+    border: 1px solid #302f29;
+    border-left: 3px solid #6b5b32;
+}
+
+.evidence-tip span {
+    color: #c7a85a;
+    font-size: 8px;
+    letter-spacing: 2px;
+}
+
+.evidence-tip p {
+    margin-top: 8px;
+
+    color: #7f7d75;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes evidenceDrop {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 950px) {
+
+    .board-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .evidence-panel {
+        order: 1;
+    }
+
+    .board-wrapper {
+        order: 2;
+    }
+
+    .evidence-board {
+        min-height: 550px;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .evidence-page {
+        width: 90%;
+        padding: 35px 0 60px;
+    }
+
+    .evidence-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .evidence-case {
+        width: 100%;
+    }
+
+    .evidence-status {
+        grid-template-columns: 1fr;
+    }
+
+    .evidence-board {
+        min-height: 500px;
+        padding: 18px;
+    }
+
+    .board-card {
+        width: 100%;
+    }
+
+    .board-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .board-action {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================
+     EVIDENCE PAGE
+========================================= -->
+
+<div class="evidence-page">
+
+    <!-- HEADER -->
+
+    <header class="evidence-header">
+
+        <div>
+
+            <p class="tag">
+                PHYSICAL EVIDENCE ANALYSIS
+            </p>
+
+            <h1>
+                Evidence Board
+            </h1>
+
+            <p>
+                Collect the clues that matter. Arrange the evidence,
+                identify relationships, and build a theory before
+                making your final accusation.
+            </p>
+
+        </div>
+
+
+        <div class="evidence-case">
+
+            <span>
+                ACTIVE CASE
+            </span>
+
+            <strong>
+                {{ case.title }}
+            </strong>
+
+        </div>
+
+    </header>
+
+
+    <!-- STATUS -->
+
+    <div class="evidence-status">
+
+        <div class="evidence-status-item score">
+
+            <span>
+                INVESTIGATION SCORE
+            </span>
+
+            <strong>
+                {{ score }}
+            </strong>
+
+        </div>
+
+
+        <div class="evidence-status-item">
+
+            <span>
+                EVIDENCE STATUS
+            </span>
+
+            <strong>
+                BUILDING
+            </strong>
+
+        </div>
+
+
+        <div class="evidence-status-item">
+
+            <span>
+                NEXT OBJECTIVE
+            </span>
+
+            <strong>
+                FIND THE LINK
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOARD -->
+
+    <div class="board-layout">
+
+
+        <!-- =====================================
+             AVAILABLE EVIDENCE
+        ====================================== -->
+
+        <aside class="evidence-panel">
+
+            <div class="evidence-panel-header">
+
+                <h2>
+                    Available Evidence
+                </h2>
+
+                <span class="evidence-count">
+                    CLUES
+                </span>
+
+            </div>
+
+
+            <p>
+                Drag evidence onto the board to include
+                it in your investigation theory.
+            </p>
+
+
+            <div
+                class="evidence-items"
+                id="evidenceItems"
+            >
+
+                <!--
+                    Existing JavaScript can populate
+                    evidence cards here.
+                -->
+
+                {% if case.clues %}
+
+                    {% for clue in case.clues %}
+
+                    <div
+                        class="evidence-card"
+                        draggable="true"
+                        data-evidence-id="{{ clue.id }}"
+                    >
+
+                        <div class="evidence-number">
+                            {{ "%02d"|format(loop.index) }}
+                        </div>
+
+                        <div class="evidence-card-content">
+
+                            <h3>
+                                {{ clue.title }}
+                            </h3>
+
+                            <p>
+                                {{ clue.description }}
+                            </p>
+
+                            <small>
+                                DRAG TO BOARD
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================
+             INVESTIGATION BOARD
+        ====================================== -->
+
+        <main class="board-wrapper">
+
+            <div class="board-label">
+
+                <span>
+                    INVESTIGATION THEORY
+                </span>
+
+                <span>
+                    DRAG • CONNECT • REASON
+                </span>
+
+            </div>
+
+
+            <div
+                class="evidence-board"
+                id="evidenceBoard"
+            >
+
+                <div class="board-empty" id="boardEmpty">
+
+                    <div class="board-empty-icon">
+                        +
+                    </div>
+
+                    <strong>
+                        Evidence board is empty
+                    </strong>
+
+                    <p>
+                        Drag important clues here to
+                        begin constructing your theory.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="board-actions">
+
+                <a
+                    href="{{ url_for('connections') }}"
+                    class="board-action"
+                >
+                    ← CONNECTIONS
+                </a>
+
+
+                <a
+                    href="{{ url_for('accuse') }}"
+                    class="board-action primary"
+                >
+                    MAKE ACCUSATION →
+                </a>
+
+            </div>
+
+
+            <!-- TIP -->
+
+            <div class="evidence-tip">
+
+                <span>
+                    DETECTIVE'S NOTE
+                </span>
+
+                <p>
+                    Do not collect evidence simply because it looks
+                    suspicious. The strongest theory is built from
+                    clues that connect independently through time,
+                    behavior, transactions, or location.
+                </p>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     OPTIONAL BOARD SCRIPT
+========================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const board = document.getElementById("evidenceBoard");
+    const emptyState = document.getElementById("boardEmpty");
+    const evidenceCards =
+        document.querySelectorAll(".evidence-card");
+
+    if (!board) return;
+
+
+    /* =====================================
+       DRAG START
+    ====================================== */
+
+    evidenceCards.forEach(card => {
+
+        card.addEventListener("dragstart", function (event) {
+
+            event.dataTransfer.setData(
+                "text/plain",
+                card.dataset.evidenceId || ""
+            );
+
+            card.style.opacity = "0.5";
+
+        });
+
+
+        card.addEventListener("dragend", function () {
+
+            card.style.opacity = "1";
+
+        });
+
+    });
+
+
+    /* =====================================
+       DRAG OVER
+    ====================================== */
+
+    board.addEventListener("dragover", function (event) {
+
+        event.preventDefault();
+
+        board.classList.add("board-hover");
+
+    });
+
+
+    /* =====================================
+       DRAG LEAVE
+    ====================================== */
+
+    board.addEventListener("dragleave", function () {
+
+        board.classList.remove("board-hover");
+
+    });
+
+
+    /* =====================================
+       DROP
+    ====================================== */
+
+    board.addEventListener("drop", function (event) {
+
+        event.preventDefault();
+
+        board.classList.remove("board-hover");
+
+        const evidenceId =
+            event.dataTransfer.getData("text/plain");
+
+        const source =
+            document.querySelector(
+                `[data-evidence-id="${evidenceId}"]`
+            );
+
+        if (!source) return;
+
+
+        /*
+         * Prevent duplicate evidence.
+         */
+
+        if (
+            board.querySelector(
+                `.board-card[data-evidence-id="${evidenceId}"]`
+            )
+        ) {
+            return;
+        }
+
+
+        const boardCard =
+            document.createElement("div");
+
+        boardCard.className = "board-card";
+
+        boardCard.dataset.evidenceId =
+            evidenceId;
+
+
+        const title =
+            source.querySelector("h3");
+
+        const description =
+            source.querySelector("p");
+
+
+        boardCard.innerHTML = `
+
+            <button
+                class="remove-evidence"
+                type="button"
+                title="Remove evidence"
+            >
+                ×
+            </button>
+
+            <h3>
+                ${title ? title.textContent : "Evidence"}
+            </h3>
+
+            <p>
+                ${description
+                    ? description.textContent
+                    : ""}
+            </p>
+
+        `;
+
+
+        board.appendChild(boardCard);
+
+
+        /*
+         * Hide empty state.
+         */
+
+        if (emptyState) {
+
+            emptyState.style.display = "none";
+
+        }
+
+
+        /*
+         * Remove evidence.
+         */
+
+        const removeButton =
+            boardCard.querySelector(
+                ".remove-evidence"
+            );
+
+        removeButton.addEventListener(
+            "click",
+            function () {
+
+                boardCard.remove();
+
+
+                if (
+                    board.querySelectorAll(
+                        ".board-card"
+                    ).length === 0
+                ) {
+
+                    if (emptyState) {
+                        emptyState.style.display = "flex";
+                    }
+
+                }
+
+            }
+        );
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

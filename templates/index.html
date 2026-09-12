@@ -1,0 +1,2459 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Data Detective | Investigation System
+{% endblock %}
+
+
+{% block extra_head %}
+
+<style>
+
+/* =========================================================
+   DATA DETECTIVE — HOME PAGE
+========================================================= */
+
+.home-page {
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    position: relative;
+
+    min-height:
+        calc(100vh - 72px);
+
+    width:
+        min(1280px, 92%);
+
+    margin:
+        0 auto;
+
+    padding:
+        70px 0 55px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(0, 1.05fr)
+        minmax(360px, .75fr);
+
+    column-gap:
+        clamp(45px, 7vw, 110px);
+
+    align-items:
+        center;
+}
+
+
+/* =========================================================
+   HERO BACKGROUND
+========================================================= */
+
+.hero::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        520px;
+
+    height:
+        520px;
+
+    left:
+        -260px;
+
+    top:
+        20%;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(242,160,74,.07),
+            transparent 70%
+        );
+
+    pointer-events:
+        none;
+}
+
+
+.hero::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        480px;
+
+    height:
+        480px;
+
+    right:
+        -230px;
+
+    top:
+        5%;
+
+    border-radius:
+        50%;
+
+    border:
+        1px solid rgba(242,160,74,.08);
+
+    box-shadow:
+        0 0 0 70px rgba(242,160,74,.018),
+        0 0 0 140px rgba(242,160,74,.012);
+
+    pointer-events:
+        none;
+}
+
+
+/* =========================================================
+   HERO CONTENT
+========================================================= */
+
+.hero-content {
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    max-width:
+        700px;
+
+    animation:
+        heroReveal .8s ease both;
+}
+
+
+@keyframes heroReveal {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(24px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* =========================================================
+   SYSTEM STATUS
+========================================================= */
+
+.case-status {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        10px 15px;
+
+    margin-bottom:
+        25px;
+
+    border:
+        1px solid #2d2d30;
+
+    background:
+        rgba(255,255,255,.025);
+
+    color:
+        #aaa8a7;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.5px;
+
+    text-transform:
+        uppercase;
+
+    box-shadow:
+        inset 0 0 20px rgba(255,255,255,.015);
+}
+
+
+/* =========================================================
+   HERO TAG
+========================================================= */
+
+.hero .tag {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        18px;
+
+    color:
+        var(--orange) !important;
+}
+
+
+.hero .tag::before {
+
+    content:
+        "";
+
+    width:
+        30px;
+
+    height:
+        1px;
+
+    background:
+        var(--orange);
+
+    box-shadow:
+        0 0 8px rgba(242,160,74,.4);
+}
+
+
+.hero .tag span {
+
+    color:
+        #68676a;
+}
+
+
+/* =========================================================
+   HERO TITLE
+========================================================= */
+
+.hero h1 {
+
+    margin:
+        0;
+
+    font-size:
+        clamp(58px, 8vw, 105px);
+
+    line-height:
+        .82;
+
+    letter-spacing:
+        -4px;
+
+    font-weight:
+        900;
+
+    text-transform:
+        uppercase;
+
+    color:
+        #eeeae3;
+}
+
+
+/* DETECTIVE OUTLINE */
+
+.hero h1 span {
+
+    display:
+        block;
+
+    color:
+        transparent;
+
+    -webkit-text-stroke:
+        1.5px #55545a;
+
+    margin-top:
+        5px;
+
+    transition:
+        color .35s ease,
+        -webkit-text-stroke .35s ease;
+}
+
+
+.hero h1:hover span {
+
+    color:
+        rgba(242,160,74,.06);
+
+    -webkit-text-stroke:
+        1.5px var(--orange);
+}
+
+
+/* =========================================================
+   HERO LINE
+========================================================= */
+
+.hero-line {
+
+    width:
+        135px;
+
+    height:
+        2px;
+
+    margin:
+        32px 0 25px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--orange),
+            rgba(242,160,74,.15)
+        );
+
+    position:
+        relative;
+}
+
+
+.hero-line::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    right:
+        -8px;
+
+    top:
+        -2px;
+
+    width:
+        5px;
+
+    height:
+        6px;
+
+    background:
+        var(--orange);
+}
+
+
+/* =========================================================
+   HERO SUBTITLE
+========================================================= */
+
+.hero-subtitle {
+
+    margin-bottom:
+        12px;
+
+    color:
+        #e7e3dc;
+
+    font-size:
+        clamp(20px, 2.2vw, 28px);
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        -.5px;
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+========================================================= */
+
+.hero-description {
+
+    max-width:
+        650px;
+
+    margin:
+        0;
+
+    color:
+        #949298;
+
+    font-size:
+        15px;
+
+    line-height:
+        1.8;
+}
+
+
+/* =========================================================
+   HERO ACTIONS
+========================================================= */
+
+.hero-actions {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        14px;
+
+    margin-top:
+        30px;
+
+    flex-wrap:
+        wrap;
+}
+
+
+.hero-actions .button {
+
+    min-width:
+        250px;
+}
+
+
+/* =========================================================
+   TERMINAL
+========================================================= */
+
+.investigation-terminal {
+
+    position:
+        relative;
+
+    z-index:
+        3;
+
+    width:
+        100%;
+
+    max-width:
+        500px;
+
+    justify-self:
+        end;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(27,27,30,.96),
+            rgba(14,14,16,.98)
+        );
+
+    border:
+        1px solid #35353a;
+
+    box-shadow:
+        0 30px 70px rgba(0,0,0,.5);
+
+    animation:
+        terminalReveal 1s .15s ease both;
+
+    overflow:
+        hidden;
+}
+
+
+@keyframes terminalReveal {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateX(30px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateX(0);
+    }
+}
+
+
+/* TERMINAL TOP ACCENT */
+
+.investigation-terminal::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    top:
+        0;
+
+    height:
+        2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--orange),
+            transparent
+        );
+
+    opacity:
+        .7;
+}
+
+
+/* =========================================================
+   TERMINAL HEADER
+========================================================= */
+
+.terminal-header {
+
+    min-height:
+        62px;
+
+    padding:
+        0 20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    border-bottom:
+        1px solid #2d2d31;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+
+.terminal-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    color:
+        #b4b1b0;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1.5px;
+}
+
+
+.terminal-dot {
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 10px rgba(103,200,154,.7);
+
+    animation:
+        terminalPulse 2s infinite;
+}
+
+
+@keyframes terminalPulse {
+
+    0%,
+    100% {
+        opacity:
+            1;
+    }
+
+    50% {
+        opacity:
+            .4;
+    }
+}
+
+
+.terminal-id {
+
+    color:
+        #626166;
+
+    font-size:
+        9px;
+
+    letter-spacing:
+        2px;
+}
+
+
+/* =========================================================
+   TERMINAL BODY
+========================================================= */
+
+.terminal-body {
+
+    padding:
+        25px;
+}
+
+
+.terminal-row {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    min-height:
+        57px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.055);
+}
+
+
+.terminal-row span {
+
+    color:
+        #66656a;
+
+    font-size:
+        9px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        1.8px;
+}
+
+
+.terminal-row strong {
+
+    color:
+        #bcb9b7;
+
+    font-size:
+        11px;
+
+    letter-spacing:
+        .8px;
+
+    text-align:
+        right;
+}
+
+
+.terminal-active {
+
+    color:
+        var(--green) !important;
+}
+
+
+/* =========================================================
+   TERMINAL DIVIDER
+========================================================= */
+
+.terminal-divider {
+
+    height:
+        1px;
+
+    margin:
+        22px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            #333337,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   SCAN
+========================================================= */
+
+.scan-label {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        10px;
+
+    color:
+        #77757a;
+
+    font-size:
+        9px;
+
+    letter-spacing:
+        1.7px;
+}
+
+
+.scan-label span:last-child {
+
+    color:
+        var(--orange);
+
+    font-weight:
+        700;
+}
+
+
+.scan-bar {
+
+    height:
+        6px;
+
+    background:
+        #29292c;
+
+    overflow:
+        hidden;
+
+    position:
+        relative;
+}
+
+
+.scan-bar span {
+
+    display:
+        block;
+
+    width:
+        87%;
+
+    height:
+        100%;
+
+    background:
+        var(--orange);
+
+    box-shadow:
+        0 0 12px rgba(242,160,74,.4);
+
+    animation:
+        scanLoad 1.4s ease both;
+}
+
+
+@keyframes scanLoad {
+
+    from {
+        width:
+            0;
+    }
+
+    to {
+        width:
+            87%;
+    }
+}
+
+
+/* =========================================================
+   HERO STATS
+========================================================= */
+
+.hero-stats {
+
+    grid-column:
+        1 / -1;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    margin-top:
+        15px;
+
+    border:
+        1px solid #2c2c30;
+
+    background:
+        rgba(255,255,255,.015);
+
+    position:
+        relative;
+
+    z-index:
+        4;
+}
+
+
+.hero-stat {
+
+    min-height:
+        105px;
+
+    padding:
+        22px 25px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    text-align:
+        center;
+
+    border-right:
+        1px solid #2c2c30;
+
+    transition:
+        background .3s ease;
+}
+
+
+.hero-stat:last-child {
+    border-right:
+        none;
+}
+
+
+.hero-stat:hover {
+
+    background:
+        rgba(242,160,74,.045);
+}
+
+
+.hero-stat strong {
+
+    color:
+        var(--orange);
+
+    font-size:
+        26px;
+
+    line-height:
+        1;
+
+    margin-bottom:
+        9px;
+
+    transition:
+        transform .25s ease;
+}
+
+
+.hero-stat:hover strong {
+
+    transform:
+        translateY(-2px);
+}
+
+
+.hero-stat span {
+
+    color:
+        #77757a;
+
+    font-size:
+        9px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        2px;
+}
+
+
+/* =========================================================
+   HOME SECTIONS
+========================================================= */
+
+.home-section {
+
+    width:
+        min(1180px, 90%);
+
+    margin:
+        0 auto;
+
+    padding:
+        110px 0;
+
+    position:
+        relative;
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.section-heading {
+
+    max-width:
+        700px;
+
+    margin-bottom:
+        50px;
+}
+
+
+.section-heading h2 {
+
+    margin:
+        12px 0 15px;
+
+    font-size:
+        clamp(30px, 4vw, 48px);
+
+    letter-spacing:
+        -1.5px;
+}
+
+
+.section-heading > p:last-child {
+
+    max-width:
+        620px;
+
+    color:
+        #858389;
+
+    line-height:
+        1.8;
+}
+
+
+/* =========================================================
+   INVESTIGATION STEPS
+========================================================= */
+
+.investigation-steps {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap:
+        1px;
+
+    background:
+        #2c2c30;
+
+    border:
+        1px solid #2c2c30;
+}
+
+
+.investigation-step {
+
+    min-height:
+        270px;
+
+    padding:
+        25px;
+
+    background:
+        #111113;
+
+    transition:
+        background .3s ease,
+        transform .3s ease;
+}
+
+
+.investigation-step:hover {
+
+    background:
+        #18181a;
+
+    transform:
+        translateY(-4px);
+}
+
+
+.step-top {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+}
+
+
+.step-top span {
+
+    color:
+        var(--orange);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1px;
+}
+
+
+.step-top i {
+
+    color:
+        #55545a;
+
+    font-size:
+        18px;
+
+    font-style:
+        normal;
+
+    transition:
+        .25s ease;
+}
+
+
+.investigation-step:hover .step-top i {
+
+    color:
+        var(--orange);
+
+    transform:
+        translate(3px,-3px);
+}
+
+
+.step-line {
+
+    width:
+        35px;
+
+    height:
+        1px;
+
+    margin:
+        32px 0 25px;
+
+    background:
+        #48474c;
+}
+
+
+.investigation-step h3 {
+
+    margin-bottom:
+        12px;
+
+    font-size:
+        15px;
+
+    letter-spacing:
+        1.5px;
+}
+
+
+.investigation-step p {
+
+    color:
+        #77757a;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.75;
+}
+
+
+/* =========================================================
+   DATA SCIENCE SECTION
+========================================================= */
+
+.data-section {
+
+    width:
+        100%;
+
+    max-width:
+        none;
+
+    padding:
+        100px max(5%, calc((100% - 1180px) / 2));
+
+    background:
+        #101012;
+
+    border-top:
+        1px solid #242427;
+
+    border-bottom:
+        1px solid #242427;
+}
+
+
+.data-section-content {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        90px;
+
+    align-items:
+        center;
+}
+
+
+.data-copy h2 {
+
+    max-width:
+        600px;
+
+    margin:
+        15px 0 20px;
+
+    font-size:
+        clamp(30px, 4vw, 48px);
+
+    letter-spacing:
+        -1.5px;
+}
+
+
+.data-copy > p:last-child {
+
+    max-width:
+        600px;
+
+    color:
+        #858389;
+
+    line-height:
+        1.8;
+}
+
+
+/* =========================================================
+   DATA FEATURES
+========================================================= */
+
+.data-features {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:
+        12px;
+}
+
+
+.data-feature {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        18px;
+
+    min-height:
+        100px;
+
+    padding:
+        18px;
+
+    border:
+        1px solid #2b2b2f;
+
+    background:
+        #151518;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
+
+
+.data-feature:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        #49494e;
+
+    background:
+        #19191c;
+}
+
+
+.data-feature > strong {
+
+    min-width:
+        52px;
+
+    height:
+        52px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    border:
+        1px solid #444348;
+
+    color:
+        var(--orange);
+
+    font-size:
+        13px;
+
+    letter-spacing:
+        1px;
+}
+
+
+.data-feature span {
+
+    display:
+        block;
+
+    color:
+        #bbb8b5;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        1px;
+}
+
+
+.data-feature small {
+
+    display:
+        block;
+
+    margin-top:
+        6px;
+
+    color:
+        #68676c;
+
+    font-size:
+        10px;
+}
+
+
+/* =========================================================
+   INVESTIGATOR SECTION
+========================================================= */
+
+.investigator-section {
+
+    width:
+        100%;
+
+    padding:
+        120px 5%;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(242,160,74,.055),
+            transparent 55%
+        );
+
+    border-bottom:
+        1px solid #242427;
+
+    text-align:
+        center;
+}
+
+
+.investigator-inner {
+
+    max-width:
+        850px;
+
+    margin:
+        0 auto;
+}
+
+
+.investigator-inner h2 {
+
+    margin:
+        20px 0;
+
+    font-size:
+        clamp(34px, 5vw, 58px);
+
+    letter-spacing:
+        -2px;
+}
+
+
+.investigator-inner h2 span {
+
+    display:
+        block;
+
+    color:
+        var(--orange);
+}
+
+
+.investigator-inner > p:last-child {
+
+    color:
+        #77757a;
+
+    font-size:
+        14px;
+}
+
+
+/* =========================================================
+   FINAL CTA
+========================================================= */
+
+.final-cta {
+
+    width:
+        min(850px, 90%);
+
+    margin:
+        0 auto;
+
+    padding:
+        120px 0;
+
+    text-align:
+        center;
+}
+
+
+.cta-line {
+
+    width:
+        70px;
+
+    height:
+        1px;
+
+    margin:
+        0 auto 30px;
+
+    background:
+        var(--orange);
+}
+
+
+.final-cta h2 {
+
+    margin:
+        15px 0;
+
+    font-size:
+        clamp(32px, 5vw, 52px);
+
+    letter-spacing:
+        -1.5px;
+}
+
+
+.final-cta > p:not(.tag) {
+
+    margin:
+        0 auto 28px;
+
+    color:
+        #77757a;
+
+    line-height:
+        1.7;
+}
+
+
+.cta-button {
+
+    min-width:
+        260px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .hero {
+
+        width:
+            88%;
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            55px;
+
+        padding:
+            65px 0 50px;
+    }
+
+
+    .hero-content {
+
+        max-width:
+            760px;
+    }
+
+
+    .investigation-terminal {
+
+        max-width:
+            650px;
+
+        justify-self:
+            start;
+    }
+
+
+    .hero-stats {
+
+        margin-top:
+            5px;
+    }
+
+
+    .investigation-steps {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .data-section {
+
+        padding-left:
+            6%;
+
+        padding-right:
+            6%;
+    }
+
+
+    .data-section-content {
+
+        gap:
+            50px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .hero {
+
+        width:
+            90%;
+
+        padding:
+            45px 0 35px;
+
+        gap:
+            40px;
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(48px, 15vw, 78px);
+
+        letter-spacing:
+            -3px;
+    }
+
+
+    .hero-description {
+
+        font-size:
+            14px;
+    }
+
+
+    .hero-actions {
+
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .hero-actions .button,
+    .hero-secondary-button {
+
+        width:
+            100%;
+    }
+
+
+    .investigation-terminal {
+
+        max-width:
+            none;
+    }
+
+
+    .terminal-body {
+
+        padding:
+            18px;
+    }
+
+
+    .terminal-row {
+
+        min-height:
+            50px;
+    }
+
+
+    .hero-stats {
+
+        grid-template-columns:
+            1fr;
+
+        width:
+            100%;
+    }
+
+
+    .hero-stat {
+
+        min-height:
+            85px;
+
+        border-right:
+            none;
+
+        border-bottom:
+            1px solid #2c2c30;
+    }
+
+
+    .hero-stat:last-child {
+
+        border-bottom:
+            none;
+    }
+
+
+    .home-section {
+
+        width:
+            90%;
+
+        padding:
+            75px 0;
+    }
+
+
+    .investigation-steps {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .investigation-step {
+
+        min-height:
+            auto;
+
+        padding:
+            24px;
+    }
+
+
+    .data-section {
+
+        padding:
+            75px 5%;
+    }
+
+
+    .data-section-content {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            40px;
+    }
+
+
+    .data-features {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .investigator-section {
+
+        padding:
+            85px 7%;
+    }
+
+
+    .final-cta {
+
+        padding:
+            85px 0;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 430px) {
+
+    .case-status {
+
+        font-size:
+            9px;
+
+        letter-spacing:
+            1px;
+    }
+
+
+    .terminal-row strong {
+
+        max-width:
+            55%;
+
+        font-size:
+            9px;
+    }
+
+
+    .hero-subtitle {
+
+        font-size:
+            19px;
+    }
+
+
+    .data-feature {
+
+        gap:
+            12px;
+    }
+
+
+    .data-feature > strong {
+
+        min-width:
+            45px;
+
+        height:
+            45px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="home-page">
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+
+    <!-- HERO CONTENT -->
+
+    <div class="hero-content">
+
+
+        <div class="case-status">
+
+            <span class="status-dot"></span>
+
+            INVESTIGATION SYSTEM ONLINE
+
+        </div>
+
+
+        <p class="tag">
+
+            AI
+
+            <span>•</span>
+
+            DATA
+
+            <span>•</span>
+
+            INVESTIGATION
+
+        </p>
+
+
+        <h1>
+
+            DATA
+
+            <span>
+                DETECTIVE
+            </span>
+
+        </h1>
+
+
+        <div class="hero-line"></div>
+
+
+        <p class="hero-subtitle">
+
+            The evidence is in the data.
+
+        </p>
+
+
+        <p class="hero-description">
+
+            Investigate suspicious behavior, uncover hidden
+            patterns, connect events, analyze anomalies,
+            and identify the person responsible.
+
+        </p>
+
+
+        <div class="hero-actions">
+
+
+            <a
+                class="button"
+                href="{{ url_for('cases') }}"
+            >
+
+                <span>
+                    START INVESTIGATION
+                </span>
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <a
+                class="hero-secondary-button"
+                href="#how-it-works"
+            >
+
+                HOW IT WORKS
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         INVESTIGATION TERMINAL
+    ====================================================== -->
+
+    <div class="investigation-terminal">
+
+
+        <div class="terminal-header">
+
+
+            <div class="terminal-title">
+
+                <span class="terminal-dot"></span>
+
+                INVESTIGATION TERMINAL
+
+            </div>
+
+
+            <span class="terminal-id">
+
+                CASE_001
+
+            </span>
+
+
+        </div>
+
+
+        <div class="terminal-body">
+
+
+            <div class="terminal-row">
+
+                <span>
+                    STATUS
+                </span>
+
+                <strong class="terminal-active">
+                    ACTIVE
+                </strong>
+
+            </div>
+
+
+            <div class="terminal-row">
+
+                <span>
+                    DATASET
+                </span>
+
+                <strong>
+                    TRANSACTIONS.CSV
+                </strong>
+
+            </div>
+
+
+            <div class="terminal-row">
+
+                <span>
+                    ANALYSIS
+                </span>
+
+                <strong>
+                    ML ANOMALY SCAN
+                </strong>
+
+            </div>
+
+
+            <div class="terminal-row">
+
+                <span>
+                    BEHAVIOR
+                </span>
+
+                <strong>
+                    CORRELATION
+                </strong>
+
+            </div>
+
+
+            <div class="terminal-divider"></div>
+
+
+            <div class="terminal-scan">
+
+
+                <div class="scan-label">
+
+                    <span>
+                        SCANNING EVIDENCE
+                    </span>
+
+                    <span>
+                        87%
+                    </span>
+
+                </div>
+
+
+                <div class="scan-bar">
+
+                    <span></span>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         HERO STATS
+    ====================================================== -->
+
+    <div class="hero-stats">
+
+
+        <div class="hero-stat">
+
+            <strong>
+                ML
+            </strong>
+
+            <span>
+                ANOMALY DETECTION
+            </span>
+
+        </div>
+
+
+        <div class="hero-stat">
+
+            <strong>
+                AI
+            </strong>
+
+            <span>
+                BEHAVIORAL ANALYSIS
+            </span>
+
+        </div>
+
+
+        <div class="hero-stat">
+
+            <strong>
+                01
+            </strong>
+
+            <span>
+                ACTIVE CASE
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     HOW IT WORKS
+========================================================= -->
+
+<section
+    class="home-section"
+    id="how-it-works"
+>
+
+
+    <div class="section-heading">
+
+
+        <p class="tag">
+            THE INVESTIGATION PROCESS
+        </p>
+
+
+        <h2>
+            Follow the evidence.
+        </h2>
+
+
+        <p>
+            Every clue matters. Every pattern tells a story.
+            Use data science and logical reasoning to uncover it.
+        </p>
+
+
+    </div>
+
+
+    <div class="investigation-steps">
+
+
+        <div class="investigation-step">
+
+            <div class="step-top">
+
+                <span>
+                    01
+                </span>
+
+                <i>
+                    ↗
+                </i>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <h3>
+                ANALYZE
+            </h3>
+
+
+            <p>
+                Examine transaction data and identify
+                suspicious patterns using statistical
+                analysis and machine learning.
+            </p>
+
+        </div>
+
+
+        <div class="investigation-step">
+
+            <div class="step-top">
+
+                <span>
+                    02
+                </span>
+
+                <i>
+                    ↗
+                </i>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <h3>
+                CONNECT
+            </h3>
+
+
+            <p>
+                Follow movements, compare timestamps,
+                and uncover connections hidden
+                between seemingly unrelated events.
+            </p>
+
+        </div>
+
+
+        <div class="investigation-step">
+
+            <div class="step-top">
+
+                <span>
+                    03
+                </span>
+
+                <i>
+                    ↗
+                </i>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <h3>
+                REASON
+            </h3>
+
+
+            <p>
+                Build your evidence board and determine
+                which clues strengthen your theory
+                and which ones are distractions.
+            </p>
+
+        </div>
+
+
+        <div class="investigation-step">
+
+            <div class="step-top">
+
+                <span>
+                    04
+                </span>
+
+                <i>
+                    ↗
+                </i>
+
+            </div>
+
+
+            <div class="step-line"></div>
+
+
+            <h3>
+                ACCUSE
+            </h3>
+
+
+            <p>
+                Select your suspect and defend your
+                conclusion using the evidence
+                discovered during your investigation.
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     DATA SCIENCE
+========================================================= -->
+
+<section class="data-section">
+
+
+    <div class="data-section-content">
+
+
+        <div class="data-copy">
+
+
+            <p class="tag">
+                POWERED BY DATA SCIENCE
+            </p>
+
+
+            <h2>
+                The clues are hidden
+                inside the data.
+            </h2>
+
+
+            <p>
+                Data Detective transforms a crime investigation
+                into a data science challenge by combining
+                anomaly detection, behavioral analysis,
+                timeline correlation, and evidence-based reasoning.
+            </p>
+
+
+        </div>
+
+
+        <div class="data-features">
+
+
+            <div class="data-feature">
+
+                <strong>
+                    ML
+                </strong>
+
+                <div>
+
+                    <span>
+                        MACHINE LEARNING
+                    </span>
+
+                    <small>
+                        Detect unusual transactions
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-feature">
+
+                <strong>
+                    EDA
+                </strong>
+
+                <div>
+
+                    <span>
+                        DATA ANALYSIS
+                    </span>
+
+                    <small>
+                        Discover hidden patterns
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-feature">
+
+                <strong>
+                    BI
+                </strong>
+
+                <div>
+
+                    <span>
+                        INVESTIGATION ANALYTICS
+                    </span>
+
+                    <small>
+                        Turn evidence into insights
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="data-feature">
+
+                <strong>
+                    AI
+                </strong>
+
+                <div>
+
+                    <span>
+                        BEHAVIORAL INTELLIGENCE
+                    </span>
+
+                    <small>
+                        Identify suspicious behavior
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     INVESTIGATOR PHILOSOPHY
+========================================================= -->
+
+<section class="investigator-section">
+
+
+    <div class="investigator-inner">
+
+
+        <p class="tag">
+            DETECTIVE'S RULE
+        </p>
+
+
+        <h2>
+
+            Don't trust the story.
+
+            <span>
+                Trust the evidence.
+            </span>
+
+        </h2>
+
+
+        <p>
+            Patterns can reveal what people try to hide.
+        </p>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- =========================================================
+     FINAL CTA
+========================================================= -->
+
+<section class="final-cta">
+
+
+    <div class="cta-line"></div>
+
+
+    <p class="tag">
+        CASE FILE READY
+    </p>
+
+
+    <h2>
+        Ready to investigate?
+    </h2>
+
+
+    <p>
+        Follow the evidence.
+        Trust the data.
+        Question everything.
+    </p>
+
+
+    <a
+        class="button cta-button"
+        href="{{ url_for('cases') }}"
+    >
+
+        <span>
+            ENTER THE CASE ROOM
+        </span>
+
+        <b>
+            →
+        </b>
+
+    </a>
+
+
+</section>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+transaction_id,suspect_id,date,amount,transaction_type,case_id
+T401,S02,2026-09-14,12500,Purchase,case_004
+T402,S04,2026-09-14,18750,Purchase,case_004
+T403,S04,2026-09-14,9500,Purchase,case_004
+T404,S03,2026-09-14,48750,Transfer,case_004
+T405,S02,2026-09-15,6200,Purchase,case_004
+T406,S04,2026-09-15,14300,Purchase,case_004
+T407,S03,2026-09-15,52000,Transfer,case_004
+T408,S04,2026-09-15,8300,Purchase,case_004
+T409,S02,2026-09-16,11200,Purchase,case_004
+T410,S03,2026-09-16,48750,Transfer,case_004
+T411,S04,2026-09-16,7600,Purchase,case_004
+T412,S03,2026-09-16,65000,Transfer,case_004

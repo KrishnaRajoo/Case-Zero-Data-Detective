@@ -1,0 +1,1154 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   DATA DETECTIVE — TIMELINE
+   Internal page styling
+========================================================= */
+
+.timeline-page {
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    padding: 55px 0 80px;
+    color: #f3f0e8;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 30px;
+    margin-bottom: 38px;
+}
+
+.timeline-heading {
+    max-width: 720px;
+}
+
+.timeline-kicker {
+    margin-bottom: 12px;
+    color: #d9a441;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+
+.timeline-heading h1 {
+    margin: 0;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1;
+    letter-spacing: -2px;
+    color: #f7f3ea;
+}
+
+.timeline-heading h1 span {
+    color: #d9a441;
+}
+
+.timeline-heading p {
+    margin: 18px 0 0;
+    max-width: 650px;
+    color: #99968e;
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   CASE STATUS
+========================================================= */
+
+.timeline-case-status {
+    min-width: 190px;
+    padding: 16px 18px;
+    background: #11130f;
+    border: 1px solid #2c2b25;
+    position: relative;
+}
+
+.timeline-case-status::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #d9a441;
+}
+
+.timeline-case-status span {
+    display: block;
+    color: #77746d;
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 7px;
+}
+
+.timeline-case-status strong {
+    color: #e9c46a;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   FILTER PANEL
+========================================================= */
+
+.timeline-filter-panel {
+    background: #11130f;
+    border: 1px solid #292822;
+    padding: 24px;
+    margin-bottom: 35px;
+}
+
+.filter-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-heading h2 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.filter-heading span {
+    color: #65635c;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.timeline-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 15px;
+    align-items: end;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #85827a;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.filter-group select {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+
+    background: #090b09;
+    border: 1px solid #35342d;
+
+    color: #e9e5dc;
+    font-family: inherit;
+    font-size: 13px;
+
+    outline: none;
+    cursor: pointer;
+
+    transition:
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+}
+
+.filter-group select:hover {
+    border-color: #6f6038;
+}
+
+.filter-group select:focus {
+    border-color: #d9a441;
+    box-shadow: 0 0 0 3px rgba(217,164,65,.08);
+}
+
+.filter-button {
+    height: 46px;
+    padding: 0 24px;
+
+    border: 1px solid #d9a441;
+    background: #d9a441;
+    color: #111;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.filter-button:hover {
+    background: #edc15f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(217,164,65,.14);
+}
+
+
+/* =========================================================
+   TIMELINE INTRO
+========================================================= */
+
+.timeline-intro {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.timeline-intro-line {
+    width: 35px;
+    height: 2px;
+    background: #d9a441;
+}
+
+.timeline-intro span {
+    color: #77746c;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline-wrapper {
+    position: relative;
+    padding: 10px 0 20px;
+}
+
+
+/*
+    Central investigation line
+*/
+
+.timeline-wrapper::before {
+    content: "";
+
+    position: absolute;
+
+    left: 145px;
+    top: 0;
+    bottom: 0;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent,
+            #4a4638 5%,
+            #4a4638 95%,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   EVENT
+========================================================= */
+
+.timeline-event {
+    display: grid;
+
+    grid-template-columns:
+        110px 70px 1fr;
+
+    gap: 0;
+
+    position: relative;
+
+    margin-bottom: 28px;
+
+    animation: timelineReveal .55s ease both;
+}
+
+.timeline-event:nth-child(2) {
+    animation-delay: .05s;
+}
+
+.timeline-event:nth-child(3) {
+    animation-delay: .10s;
+}
+
+.timeline-event:nth-child(4) {
+    animation-delay: .15s;
+}
+
+.timeline-event:nth-child(5) {
+    animation-delay: .20s;
+}
+
+.timeline-event:nth-child(6) {
+    animation-delay: .25s;
+}
+
+.timeline-event:nth-child(7) {
+    animation-delay: .30s;
+}
+
+@keyframes timelineReveal {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   TIME
+========================================================= */
+
+.timeline-time {
+    padding-top: 19px;
+    padding-right: 20px;
+
+    text-align: right;
+
+    color: #d9a441;
+
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+
+    letter-spacing: .5px;
+}
+
+
+/* =========================================================
+   MARKER
+========================================================= */
+
+.timeline-marker {
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+}
+
+.timeline-marker span {
+    position: relative;
+
+    width: 15px;
+    height: 15px;
+
+    margin-top: 20px;
+
+    border-radius: 50%;
+
+    background: #d9a441;
+
+    border: 4px solid #0b0d0b;
+
+    box-shadow:
+        0 0 0 1px #716039,
+        0 0 14px rgba(217,164,65,.25);
+
+    z-index: 3;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease;
+}
+
+
+/* =========================================================
+   EVENT CONTENT
+========================================================= */
+
+.timeline-content {
+    padding: 20px 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #171914,
+            #11130f
+        );
+
+    border: 1px solid #2d2c26;
+
+    position: relative;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.timeline-content::before {
+    content: "";
+
+    position: absolute;
+
+    left: -7px;
+    top: 22px;
+
+    width: 12px;
+    height: 12px;
+
+    background: #171914;
+
+    border-left: 1px solid #2d2c26;
+    border-bottom: 1px solid #2d2c26;
+
+    transform: rotate(45deg);
+}
+
+.timeline-content:hover {
+    transform: translateX(5px);
+
+    border-color: #625532;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.22);
+}
+
+.timeline-content:hover
+.timeline-marker span {
+    transform: scale(1.25);
+}
+
+
+/* =========================================================
+   EVENT TOP
+========================================================= */
+
+.timeline-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 11px;
+}
+
+.event-type {
+    color: #d9a441;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.event-location {
+    color: #68665e;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   EVENT TITLE
+========================================================= */
+
+.timeline-content h3 {
+    margin: 0 0 9px;
+
+    color: #eeeae0;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    letter-spacing: -.3px;
+}
+
+.timeline-content p {
+    margin: 0;
+
+    color: #99968e;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.timeline-content small {
+    display: block;
+
+    margin-top: 13px;
+
+    color: #5f5d56;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   EVENT FLAGS
+========================================================= */
+
+.event-flag {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 14px;
+
+    padding: 5px 9px;
+
+    border: 1px solid #493e28;
+
+    background: #19170f;
+
+    color: #d9a441;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.event-flag::before {
+    content: "";
+
+    width: 5px;
+    height: 5px;
+
+    margin-right: 7px;
+
+    border-radius: 50%;
+
+    background: #d9a441;
+
+    box-shadow: 0 0 8px rgba(217,164,65,.6);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.timeline-empty {
+    padding: 70px 30px;
+
+    text-align: center;
+
+    background: #11130f;
+
+    border: 1px dashed #34332c;
+}
+
+.timeline-empty-icon {
+    width: 60px;
+    height: 60px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #403e34;
+
+    color: #d9a441;
+
+    font-size: 22px;
+}
+
+.timeline-empty h3 {
+    margin-bottom: 8px;
+}
+
+.timeline-empty p {
+    color: #77746c;
+}
+
+
+/* =========================================================
+   INVESTIGATION NOTE
+========================================================= */
+
+.timeline-note {
+    margin-top: 35px;
+
+    padding: 22px 25px;
+
+    background: #15150f;
+
+    border-left: 3px solid #d9a441;
+}
+
+.timeline-note span {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #d9a441;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.timeline-note p {
+    margin: 0;
+
+    color: #99968e;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   BACK / NAVIGATION
+========================================================= */
+
+.timeline-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    margin-top: 35px;
+}
+
+.timeline-nav-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 12px 18px;
+
+    border: 1px solid #34332c;
+
+    background: #11130f;
+
+    color: #aaa69d;
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1.2px;
+
+    transition:
+        border-color .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+.timeline-nav-button:hover {
+    border-color: #d9a441;
+    color: #e9c46a;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .timeline-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .timeline-case-status {
+        width: 100%;
+    }
+
+    .timeline-filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filter-button {
+        grid-column: 1 / -1;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .timeline-page {
+        width: 90%;
+        padding-top: 35px;
+    }
+
+    .timeline-heading h1 {
+        font-size: 38px;
+    }
+
+    .timeline-filter-panel {
+        padding: 18px;
+    }
+
+    .filter-heading {
+        align-items: flex-start;
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    .timeline-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-button {
+        grid-column: auto;
+        width: 100%;
+    }
+
+
+    /*
+       Mobile timeline
+    */
+
+    .timeline-wrapper::before {
+        left: 13px;
+    }
+
+    .timeline-event {
+        grid-template-columns: 35px 1fr;
+        gap: 12px;
+    }
+
+    .timeline-time {
+        grid-column: 2;
+
+        padding: 0 0 8px;
+
+        text-align: left;
+
+        font-size: 11px;
+    }
+
+    .timeline-marker {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .timeline-marker span {
+        margin-top: 21px;
+    }
+
+    .timeline-content {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .timeline-content::before {
+        left: -7px;
+    }
+
+    .timeline-top {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .timeline-heading h1 {
+        font-size: 32px;
+        letter-spacing: -1px;
+    }
+
+    .timeline-content {
+        padding: 17px;
+    }
+
+    .timeline-content h3 {
+        font-size: 16px;
+    }
+
+}
+
+</style>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="timeline-page">
+
+
+    <!-- HEADER -->
+
+    <header class="timeline-header">
+
+        <div class="timeline-heading">
+
+            <div class="timeline-kicker">
+                INVESTIGATION / CHRONOLOGY
+            </div>
+
+            <h1>
+                Follow the
+                <span>timeline.</span>
+            </h1>
+
+            <p>
+                Reconstruct the sequence of events.
+                Compare movements, locations, and timestamps
+                to uncover connections hidden within the case.
+            </p>
+
+        </div>
+
+
+        <div class="timeline-case-status">
+
+            <span>
+                ACTIVE CASE
+            </span>
+
+            <strong>
+                {{ case.title }}
+            </strong>
+
+        </div>
+
+    </header>
+
+
+    <!-- FILTERS -->
+
+    <section class="timeline-filter-panel">
+
+        <div class="filter-heading">
+
+            <h2>
+                Timeline Filters
+            </h2>
+
+            <span>
+                NARROW THE EVIDENCE
+            </span>
+
+        </div>
+
+
+        <form
+            method="GET"
+            action="{{ url_for('timeline') }}"
+            class="timeline-filters"
+        >
+
+
+            <!-- SUSPECT -->
+
+            <div class="filter-group">
+
+                <label for="suspect">
+                    Suspect
+                </label>
+
+                <select
+                    id="suspect"
+                    name="suspect"
+                >
+
+                    <option value="ALL">
+                        All Suspects
+                    </option>
+
+                    {% for suspect in suspects %}
+
+                        <option
+                            value="{{ suspect.id }}"
+                            {% if selected_suspect == suspect.id|string %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ suspect.name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="filter-group">
+
+                <label for="location">
+                    Location
+                </label>
+
+                <select
+                    id="location"
+                    name="location"
+                >
+
+                    <option value="ALL">
+                        All Locations
+                    </option>
+
+                    {% for location in locations %}
+
+                        <option
+                            value="{{ location }}"
+                            {% if selected_location == location %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ location }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="filter-button"
+            >
+                APPLY FILTER
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- TIMELINE -->
+
+    <div class="timeline-intro">
+
+        <div class="timeline-intro-line"></div>
+
+        <span>
+            CHRONOLOGICAL EVIDENCE
+        </span>
+
+    </div>
+
+
+    {% if events %}
+
+        <section class="timeline-wrapper">
+
+
+            {% for event in events %}
+
+                <article class="timeline-event">
+
+
+                    <!-- TIME -->
+
+                    <div class="timeline-time">
+
+                        {{ event.time }}
+
+                    </div>
+
+
+                    <!-- MARKER -->
+
+                    <div class="timeline-marker">
+
+                        <span></span>
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+
+                    <div class="timeline-content">
+
+
+                        <div class="timeline-top">
+
+                            <span class="event-type">
+
+                                {% if event.event_type %}
+                                    {{ event.event_type }}
+                                {% else %}
+                                    MOVEMENT
+                                {% endif %}
+
+                            </span>
+
+
+                            {% if event.location %}
+
+                                <span class="event-location">
+
+                                    {{ event.location }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <h3>
+
+                            {% if event.suspect_name %}
+
+                                {{ event.suspect_name }}
+
+                            {% elif event.suspect_id %}
+
+                                {{ event.suspect_id }}
+
+                            {% else %}
+
+                                UNKNOWN SUBJECT
+
+                            {% endif %}
+
+                        </h3>
+
+
+                        {% if event.description %}
+
+                            <p>
+                                {{ event.description }}
+                            </p>
+
+                        {% elif event.details %}
+
+                            <p>
+                                {{ event.details }}
+                            </p>
+
+                        {% endif %}
+
+
+                        {% if event.suspect_id %}
+
+                            <small>
+                                SUBJECT ID:
+                                {{ event.suspect_id }}
+                            </small>
+
+                        {% endif %}
+
+
+                        {% if event.suspicious %}
+
+                            <div class="event-flag">
+                                SUSPICIOUS EVENT
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+
+        </section>
+
+    {% else %}
+
+        <section class="timeline-empty">
+
+            <div class="timeline-empty-icon">
+                ⌁
+            </div>
+
+            <h3>
+                No events found
+            </h3>
+
+            <p>
+                No timeline events match the current filters.
+                Try broadening your investigation.
+            </p>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- INVESTIGATION NOTE -->
+
+    <section class="timeline-note">
+
+        <span>
+            DETECTIVE'S NOTE
+        </span>
+
+        <p>
+            Don't investigate individual events in isolation.
+            Look for unusual timing, repeated locations,
+            overlapping movements, and sequences that appear
+            too coordinated to be accidental.
+        </p>
+
+    </section>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="timeline-navigation">
+
+        <a
+            href="{{ url_for('investigation') }}"
+            class="timeline-nav-button"
+        >
+            ← BACK TO INVESTIGATION
+        </a>
+
+
+        <a
+            href="{{ url_for('connections') }}"
+            class="timeline-nav-button"
+        >
+            FIND CONNECTIONS →
+        </a>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
