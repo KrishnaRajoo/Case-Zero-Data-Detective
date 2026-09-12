@@ -10,6 +10,157 @@
 <style>
 
 /* =========================================================
+   SCREEN LOADER
+========================================================= */
+
+.screen-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: black;
+
+    opacity: 1;
+    visibility: visible;
+
+    transition:
+        opacity .7s ease,
+        visibility .7s ease;
+}
+
+.screen-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    width: min(90%, 430px);
+    text-align: center;
+}
+
+.loader-logo {
+    width: 92px;
+    height: 92px;
+
+    margin: 0 auto 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(242,160,74,.7);
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 25px rgba(242,160,74,.18),
+        inset 0 0 25px rgba(242,160,74,.06);
+
+    animation: loaderLogoPulse 2s ease-in-out infinite;
+}
+
+.loader-logo img {
+    width: 70px;
+    height: 70px;
+
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.loader-title {
+    color: #eeeae3;
+
+    font-size: 27px;
+    font-weight: 900;
+
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.loader-title span {
+    color: var(--orange);
+}
+
+.loader-subtitle {
+    margin-top: 11px;
+
+    color: #858389;
+
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.loader-progress {
+    width: 100%;
+    height: 4px;
+
+    margin-top: 30px;
+
+    overflow: hidden;
+    background: #29292c;
+}
+
+.loader-progress span {
+    display: block;
+
+    width: 35%;
+    height: 100%;
+
+    background: var(--orange);
+    box-shadow: 0 0 12px rgba(242,160,74,.5);
+
+    animation: loaderProgress 1.8s ease-in-out infinite;
+}
+
+.loader-status {
+    margin-top: 15px;
+
+    color: #68676c;
+
+    font-size: 9px;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+}
+
+@keyframes loaderProgress {
+    from {
+        transform: translateX(-130%);
+    }
+
+    to {
+        transform: translateX(390%);
+    }
+}
+
+@keyframes loaderLogoPulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loader-logo,
+    .loader-progress span {
+        animation: none;
+    }
+
+    .screen-loader {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
    DATA DETECTIVE — HOME PAGE
 ========================================================= */
 
@@ -24,33 +175,19 @@
 ========================================================= */
 
 .hero {
-
     position: relative;
+    min-height: calc(100vh - 72px);
+    width: min(1280px, 92%);
+    margin: 0 auto;
+    padding: 70px 0 55px;
 
-    min-height:
-        calc(100vh - 72px);
-
-    width:
-        min(1280px, 92%);
-
-    margin:
-        0 auto;
-
-    padding:
-        70px 0 55px;
-
-    display:
-        grid;
-
+    display: grid;
     grid-template-columns:
         minmax(0, 1.05fr)
         minmax(360px, .75fr);
 
-    column-gap:
-        clamp(45px, 7vw, 110px);
-
-    align-items:
-        center;
+    column-gap: clamp(45px, 7vw, 110px);
+    align-items: center;
 }
 
 
@@ -59,27 +196,17 @@
 ========================================================= */
 
 .hero::before {
+    content: "";
 
-    content:
-        "";
+    position: absolute;
 
-    position:
-        absolute;
+    width: 520px;
+    height: 520px;
 
-    width:
-        520px;
+    left: -260px;
+    top: 20%;
 
-    height:
-        520px;
-
-    left:
-        -260px;
-
-    top:
-        20%;
-
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
         radial-gradient(
@@ -88,43 +215,28 @@
             transparent 70%
         );
 
-    pointer-events:
-        none;
+    pointer-events: none;
 }
 
-
 .hero::after {
+    content: "";
 
-    content:
-        "";
+    position: absolute;
 
-    position:
-        absolute;
+    width: 480px;
+    height: 480px;
 
-    width:
-        480px;
+    right: -230px;
+    top: 5%;
 
-    height:
-        480px;
-
-    right:
-        -230px;
-
-    top:
-        5%;
-
-    border-radius:
-        50%;
-
-    border:
-        1px solid rgba(242,160,74,.08);
+    border-radius: 50%;
+    border: 1px solid rgba(242,160,74,.08);
 
     box-shadow:
         0 0 0 70px rgba(242,160,74,.018),
         0 0 0 140px rgba(242,160,74,.012);
 
-    pointer-events:
-        none;
+    pointer-events: none;
 }
 
 
@@ -133,39 +245,23 @@
 ========================================================= */
 
 .hero-content {
+    position: relative;
+    z-index: 3;
 
-    position:
-        relative;
+    max-width: 700px;
 
-    z-index:
-        3;
-
-    max-width:
-        700px;
-
-    animation:
-        heroReveal .8s ease both;
+    animation: heroReveal .8s ease both;
 }
 
-
 @keyframes heroReveal {
-
     from {
-
-        opacity:
-            0;
-
-        transform:
-            translateY(24px);
+        opacity: 0;
+        transform: translateY(24px);
     }
 
     to {
-
-        opacity:
-            1;
-
-        transform:
-            translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -175,45 +271,24 @@
 ========================================================= */
 
 .case-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
 
-    display:
-        inline-flex;
+    padding: 10px 15px;
+    margin-bottom: 25px;
 
-    align-items:
-        center;
+    border: 1px solid #2d2d30;
+    background: rgba(255,255,255,.025);
 
-    gap:
-        10px;
+    color: #aaa8a7;
 
-    padding:
-        10px 15px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 
-    margin-bottom:
-        25px;
-
-    border:
-        1px solid #2d2d30;
-
-    background:
-        rgba(255,255,255,.025);
-
-    color:
-        #aaa8a7;
-
-    font-size:
-        10px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        1.5px;
-
-    text-transform:
-        uppercase;
-
-    box-shadow:
-        inset 0 0 20px rgba(255,255,255,.015);
+    box-shadow: inset 0 0 20px rgba(255,255,255,.015);
 }
 
 
@@ -222,47 +297,26 @@
 ========================================================= */
 
 .hero .tag {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        12px;
-
-    margin-bottom:
-        18px;
-
-    color:
-        var(--orange) !important;
+    margin-bottom: 18px;
+    color: var(--orange) !important;
 }
-
 
 .hero .tag::before {
+    content: "";
 
-    content:
-        "";
+    width: 30px;
+    height: 1px;
 
-    width:
-        30px;
-
-    height:
-        1px;
-
-    background:
-        var(--orange);
-
-    box-shadow:
-        0 0 8px rgba(242,160,74,.4);
+    background: var(--orange);
+    box-shadow: 0 0 8px rgba(242,160,74,.4);
 }
 
-
 .hero .tag span {
-
-    color:
-        #68676a;
+    color: #68676a;
 }
 
 
@@ -271,59 +325,33 @@
 ========================================================= */
 
 .hero h1 {
+    margin: 0;
 
-    margin:
-        0;
+    font-size: clamp(58px, 8vw, 105px);
+    line-height: .82;
+    letter-spacing: -4px;
+    font-weight: 900;
 
-    font-size:
-        clamp(58px, 8vw, 105px);
-
-    line-height:
-        .82;
-
-    letter-spacing:
-        -4px;
-
-    font-weight:
-        900;
-
-    text-transform:
-        uppercase;
-
-    color:
-        #eeeae3;
+    text-transform: uppercase;
+    color: #eeeae3;
 }
 
-
-/* DETECTIVE OUTLINE */
-
 .hero h1 span {
+    display: block;
 
-    display:
-        block;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #55545a;
 
-    color:
-        transparent;
-
-    -webkit-text-stroke:
-        1.5px #55545a;
-
-    margin-top:
-        5px;
+    margin-top: 5px;
 
     transition:
         color .35s ease,
         -webkit-text-stroke .35s ease;
 }
 
-
 .hero h1:hover span {
-
-    color:
-        rgba(242,160,74,.06);
-
-    -webkit-text-stroke:
-        1.5px var(--orange);
+    color: rgba(242,160,74,.06);
+    -webkit-text-stroke: 1.5px var(--orange);
 }
 
 
@@ -332,15 +360,10 @@
 ========================================================= */
 
 .hero-line {
+    width: 135px;
+    height: 2px;
 
-    width:
-        135px;
-
-    height:
-        2px;
-
-    margin:
-        32px 0 25px;
+    margin: 32px 0 25px;
 
     background:
         linear-gradient(
@@ -349,33 +372,21 @@
             rgba(242,160,74,.15)
         );
 
-    position:
-        relative;
+    position: relative;
 }
 
-
 .hero-line::after {
+    content: "";
 
-    content:
-        "";
+    position: absolute;
 
-    position:
-        absolute;
+    right: -8px;
+    top: -2px;
 
-    right:
-        -8px;
+    width: 5px;
+    height: 6px;
 
-    top:
-        -2px;
-
-    width:
-        5px;
-
-    height:
-        6px;
-
-    background:
-        var(--orange);
+    background: var(--orange);
 }
 
 
@@ -384,21 +395,13 @@
 ========================================================= */
 
 .hero-subtitle {
+    margin-bottom: 12px;
 
-    margin-bottom:
-        12px;
+    color: #e7e3dc;
 
-    color:
-        #e7e3dc;
-
-    font-size:
-        clamp(20px, 2.2vw, 28px);
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        -.5px;
+    font-size: clamp(20px, 2.2vw, 28px);
+    font-weight: 700;
+    letter-spacing: -.5px;
 }
 
 
@@ -407,21 +410,13 @@
 ========================================================= */
 
 .hero-description {
+    max-width: 650px;
+    margin: 0;
 
-    max-width:
-        650px;
+    color: #949298;
 
-    margin:
-        0;
-
-    color:
-        #949298;
-
-    font-size:
-        15px;
-
-    line-height:
-        1.8;
+    font-size: 15px;
+    line-height: 1.8;
 }
 
 
@@ -430,28 +425,16 @@
 ========================================================= */
 
 .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        14px;
-
-    margin-top:
-        30px;
-
-    flex-wrap:
-        wrap;
+    margin-top: 30px;
+    flex-wrap: wrap;
 }
 
-
 .hero-actions .button {
-
-    min-width:
-        250px;
+    min-width: 250px;
 }
 
 
@@ -460,21 +443,13 @@
 ========================================================= */
 
 .investigation-terminal {
+    position: relative;
+    z-index: 3;
 
-    position:
-        relative;
+    width: 100%;
+    max-width: 500px;
 
-    z-index:
-        3;
-
-    width:
-        100%;
-
-    max-width:
-        500px;
-
-    justify-self:
-        end;
+    justify-self: end;
 
     background:
         linear-gradient(
@@ -483,63 +458,36 @@
             rgba(14,14,16,.98)
         );
 
-    border:
-        1px solid #35353a;
+    border: 1px solid #35353a;
 
-    box-shadow:
-        0 30px 70px rgba(0,0,0,.5);
+    box-shadow: 0 30px 70px rgba(0,0,0,.5);
 
-    animation:
-        terminalReveal 1s .15s ease both;
-
-    overflow:
-        hidden;
+    animation: terminalReveal 1s .15s ease both;
+    overflow: hidden;
 }
 
-
 @keyframes terminalReveal {
-
     from {
-
-        opacity:
-            0;
-
-        transform:
-            translateX(30px);
+        opacity: 0;
+        transform: translateX(30px);
     }
 
     to {
-
-        opacity:
-            1;
-
-        transform:
-            translateX(0);
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
-
-/* TERMINAL TOP ACCENT */
-
 .investigation-terminal::before {
+    content: "";
 
-    content:
-        "";
+    position: absolute;
 
-    position:
-        absolute;
+    left: 0;
+    right: 0;
+    top: 0;
 
-    left:
-        0;
-
-    right:
-        0;
-
-    top:
-        0;
-
-    height:
-        2px;
+    height: 2px;
 
     background:
         linear-gradient(
@@ -549,8 +497,7 @@
             transparent
         );
 
-    opacity:
-        .7;
+    opacity: .7;
 }
 
 
@@ -559,102 +506,57 @@
 ========================================================= */
 
 .terminal-header {
+    min-height: 62px;
+    padding: 0 20px;
 
-    min-height:
-        62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    padding:
-        0 20px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    border-bottom:
-        1px solid #2d2d31;
-
-    background:
-        rgba(255,255,255,.025);
+    border-bottom: 1px solid #2d2d31;
+    background: rgba(255,255,255,.025);
 }
-
 
 .terminal-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 
-    display:
-        flex;
+    color: #b4b1b0;
 
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    color:
-        #b4b1b0;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        1.5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
 }
-
 
 .terminal-dot {
+    width: 7px;
+    height: 7px;
 
-    width:
-        7px;
+    border-radius: 50%;
+    background: var(--green);
 
-    height:
-        7px;
+    box-shadow: 0 0 10px rgba(103,200,154,.7);
 
-    border-radius:
-        50%;
-
-    background:
-        var(--green);
-
-    box-shadow:
-        0 0 10px rgba(103,200,154,.7);
-
-    animation:
-        terminalPulse 2s infinite;
+    animation: terminalPulse 2s infinite;
 }
 
-
 @keyframes terminalPulse {
-
     0%,
     100% {
-        opacity:
-            1;
+        opacity: 1;
     }
 
     50% {
-        opacity:
-            .4;
+        opacity: .4;
     }
 }
 
-
 .terminal-id {
+    color: #626166;
 
-    color:
-        #626166;
-
-    font-size:
-        9px;
-
-    letter-spacing:
-        2px;
+    font-size: 9px;
+    letter-spacing: 2px;
 }
 
 
@@ -663,67 +565,37 @@
 ========================================================= */
 
 .terminal-body {
-
-    padding:
-        25px;
+    padding: 25px;
 }
-
 
 .terminal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    display:
-        flex;
+    min-height: 57px;
 
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    min-height:
-        57px;
-
-    border-bottom:
-        1px solid rgba(255,255,255,.055);
+    border-bottom: 1px solid rgba(255,255,255,.055);
 }
-
 
 .terminal-row span {
+    color: #66656a;
 
-    color:
-        #66656a;
-
-    font-size:
-        9px;
-
-    font-weight:
-        600;
-
-    letter-spacing:
-        1.8px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.8px;
 }
-
 
 .terminal-row strong {
+    color: #bcb9b7;
 
-    color:
-        #bcb9b7;
-
-    font-size:
-        11px;
-
-    letter-spacing:
-        .8px;
-
-    text-align:
-        right;
+    font-size: 11px;
+    letter-spacing: .8px;
+    text-align: right;
 }
 
-
 .terminal-active {
-
-    color:
-        var(--green) !important;
+    color: var(--green) !important;
 }
 
 
@@ -732,12 +604,9 @@
 ========================================================= */
 
 .terminal-divider {
+    height: 1px;
 
-    height:
-        1px;
-
-    margin:
-        22px 0;
+    margin: 22px 0;
 
     background:
         linear-gradient(
@@ -753,85 +622,49 @@
 ========================================================= */
 
 .scan-label {
+    display: flex;
+    justify-content: space-between;
 
-    display:
-        flex;
+    margin-bottom: 10px;
 
-    justify-content:
-        space-between;
+    color: #77757a;
 
-    margin-bottom:
-        10px;
-
-    color:
-        #77757a;
-
-    font-size:
-        9px;
-
-    letter-spacing:
-        1.7px;
+    font-size: 9px;
+    letter-spacing: 1.7px;
 }
-
 
 .scan-label span:last-child {
-
-    color:
-        var(--orange);
-
-    font-weight:
-        700;
+    color: var(--orange);
+    font-weight: 700;
 }
-
 
 .scan-bar {
+    height: 6px;
 
-    height:
-        6px;
-
-    background:
-        #29292c;
-
-    overflow:
-        hidden;
-
-    position:
-        relative;
+    background: #29292c;
+    overflow: hidden;
+    position: relative;
 }
-
 
 .scan-bar span {
+    display: block;
 
-    display:
-        block;
+    width: 87%;
+    height: 100%;
 
-    width:
-        87%;
+    background: var(--orange);
+    box-shadow: 0 0 12px rgba(242,160,74,.4);
 
-    height:
-        100%;
-
-    background:
-        var(--orange);
-
-    box-shadow:
-        0 0 12px rgba(242,160,74,.4);
-
-    animation:
-        scanLoad 1.4s ease both;
+    animation: scanLoad 1.4s ease both;
 }
 
-
 @keyframes scanLoad {
-
     from {
-        width:
-            0;
+        width: 0;
     }
 
     to {
-        width:
-            87%;
+        width: 87%;
     }
 }
 
@@ -841,116 +674,65 @@
 ========================================================= */
 
 .hero-stats {
+    grid-column: 1 / -1;
 
-    grid-column:
-        1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 
-    display:
-        grid;
+    margin-top: 15px;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+    border: 1px solid #2c2c30;
+    background: rgba(255,255,255,.015);
 
-    margin-top:
-        15px;
-
-    border:
-        1px solid #2c2c30;
-
-    background:
-        rgba(255,255,255,.015);
-
-    position:
-        relative;
-
-    z-index:
-        4;
+    position: relative;
+    z-index: 4;
 }
-
 
 .hero-stat {
+    min-height: 105px;
+    padding: 22px 25px;
 
-    min-height:
-        105px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    padding:
-        22px 25px;
+    text-align: center;
 
-    display:
-        flex;
+    border-right: 1px solid #2c2c30;
 
-    flex-direction:
-        column;
-
-    justify-content:
-        center;
-
-    align-items:
-        center;
-
-    text-align:
-        center;
-
-    border-right:
-        1px solid #2c2c30;
-
-    transition:
-        background .3s ease;
+    transition: background .3s ease;
 }
-
 
 .hero-stat:last-child {
-    border-right:
-        none;
+    border-right: none;
 }
-
 
 .hero-stat:hover {
-
-    background:
-        rgba(242,160,74,.045);
+    background: rgba(242,160,74,.045);
 }
-
 
 .hero-stat strong {
+    color: var(--orange);
 
-    color:
-        var(--orange);
+    font-size: 26px;
+    line-height: 1;
 
-    font-size:
-        26px;
+    margin-bottom: 9px;
 
-    line-height:
-        1;
-
-    margin-bottom:
-        9px;
-
-    transition:
-        transform .25s ease;
+    transition: transform .25s ease;
 }
-
 
 .hero-stat:hover strong {
-
-    transform:
-        translateY(-2px);
+    transform: translateY(-2px);
 }
 
-
 .hero-stat span {
+    color: #77757a;
 
-    color:
-        #77757a;
-
-    font-size:
-        9px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        2px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
 }
 
 
@@ -959,18 +741,12 @@
 ========================================================= */
 
 .home-section {
+    width: min(1180px, 90%);
 
-    width:
-        min(1180px, 90%);
+    margin: 0 auto;
+    padding: 110px 0;
 
-    margin:
-        0 auto;
-
-    padding:
-        110px 0;
-
-    position:
-        relative;
+    position: relative;
 }
 
 
@@ -979,38 +755,22 @@
 ========================================================= */
 
 .section-heading {
-
-    max-width:
-        700px;
-
-    margin-bottom:
-        50px;
+    max-width: 700px;
+    margin-bottom: 50px;
 }
-
 
 .section-heading h2 {
+    margin: 12px 0 15px;
 
-    margin:
-        12px 0 15px;
-
-    font-size:
-        clamp(30px, 4vw, 48px);
-
-    letter-spacing:
-        -1.5px;
+    font-size: clamp(30px, 4vw, 48px);
+    letter-spacing: -1.5px;
 }
 
-
 .section-heading > p:last-child {
+    max-width: 620px;
 
-    max-width:
-        620px;
-
-    color:
-        #858389;
-
-    line-height:
-        1.8;
+    color: #858389;
+    line-height: 1.8;
 }
 
 
@@ -1019,145 +779,79 @@
 ========================================================= */
 
 .investigation-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
 
-    display:
-        grid;
+    gap: 1px;
 
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap:
-        1px;
-
-    background:
-        #2c2c30;
-
-    border:
-        1px solid #2c2c30;
+    background: #2c2c30;
+    border: 1px solid #2c2c30;
 }
 
-
 .investigation-step {
+    min-height: 270px;
+    padding: 25px;
 
-    min-height:
-        270px;
-
-    padding:
-        25px;
-
-    background:
-        #111113;
+    background: #111113;
 
     transition:
         background .3s ease,
         transform .3s ease;
 }
 
-
 .investigation-step:hover {
-
-    background:
-        #18181a;
-
-    transform:
-        translateY(-4px);
+    background: #18181a;
+    transform: translateY(-4px);
 }
-
 
 .step-top {
-
-    display:
-        flex;
-
-    justify-content:
-        space-between;
-
-    align-items:
-        center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-
 
 .step-top span {
+    color: var(--orange);
 
-    color:
-        var(--orange);
-
-    font-size:
-        12px;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        1px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
-
 
 .step-top i {
+    color: #55545a;
 
-    color:
-        #55545a;
+    font-size: 18px;
+    font-style: normal;
 
-    font-size:
-        18px;
-
-    font-style:
-        normal;
-
-    transition:
-        .25s ease;
+    transition: .25s ease;
 }
-
 
 .investigation-step:hover .step-top i {
-
-    color:
-        var(--orange);
-
-    transform:
-        translate(3px,-3px);
+    color: var(--orange);
+    transform: translate(3px,-3px);
 }
-
 
 .step-line {
+    width: 35px;
+    height: 1px;
 
-    width:
-        35px;
-
-    height:
-        1px;
-
-    margin:
-        32px 0 25px;
-
-    background:
-        #48474c;
+    margin: 32px 0 25px;
+    background: #48474c;
 }
-
 
 .investigation-step h3 {
+    margin-bottom: 12px;
 
-    margin-bottom:
-        12px;
-
-    font-size:
-        15px;
-
-    letter-spacing:
-        1.5px;
+    font-size: 15px;
+    letter-spacing: 1.5px;
 }
 
-
 .investigation-step p {
+    color: #77757a;
 
-    color:
-        #77757a;
-
-    font-size:
-        13px;
-
-    line-height:
-        1.75;
+    font-size: 13px;
+    line-height: 1.75;
 }
 
 
@@ -1166,69 +860,39 @@
 ========================================================= */
 
 .data-section {
+    width: 100%;
+    max-width: none;
 
-    width:
-        100%;
+    padding: 100px max(5%, calc((100% - 1180px) / 2));
 
-    max-width:
-        none;
+    background: #101012;
 
-    padding:
-        100px max(5%, calc((100% - 1180px) / 2));
-
-    background:
-        #101012;
-
-    border-top:
-        1px solid #242427;
-
-    border-bottom:
-        1px solid #242427;
+    border-top: 1px solid #242427;
+    border-bottom: 1px solid #242427;
 }
-
 
 .data-section-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
-    display:
-        grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap:
-        90px;
-
-    align-items:
-        center;
+    gap: 90px;
+    align-items: center;
 }
-
 
 .data-copy h2 {
+    max-width: 600px;
 
-    max-width:
-        600px;
+    margin: 15px 0 20px;
 
-    margin:
-        15px 0 20px;
-
-    font-size:
-        clamp(30px, 4vw, 48px);
-
-    letter-spacing:
-        -1.5px;
+    font-size: clamp(30px, 4vw, 48px);
+    letter-spacing: -1.5px;
 }
 
-
 .data-copy > p:last-child {
+    max-width: 600px;
 
-    max-width:
-        600px;
-
-    color:
-        #858389;
-
-    line-height:
-        1.8;
+    color: #858389;
+    line-height: 1.8;
 }
 
 
@@ -1237,40 +901,21 @@
 ========================================================= */
 
 .data-features {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(2, 1fr);
-
-    gap:
-        12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
 }
 
-
 .data-feature {
+    display: flex;
+    align-items: center;
+    gap: 18px;
 
-    display:
-        flex;
+    min-height: 100px;
+    padding: 18px;
 
-    align-items:
-        center;
-
-    gap:
-        18px;
-
-    min-height:
-        100px;
-
-    padding:
-        18px;
-
-    border:
-        1px solid #2b2b2f;
-
-    background:
-        #151518;
+    border: 1px solid #2b2b2f;
+    background: #151518;
 
     transition:
         transform .25s ease,
@@ -1278,80 +923,45 @@
         background .25s ease;
 }
 
-
 .data-feature:hover {
+    transform: translateY(-3px);
 
-    transform:
-        translateY(-3px);
-
-    border-color:
-        #49494e;
-
-    background:
-        #19191c;
+    border-color: #49494e;
+    background: #19191c;
 }
-
 
 .data-feature > strong {
+    min-width: 52px;
+    height: 52px;
 
-    min-width:
-        52px;
+    display: grid;
+    place-items: center;
 
-    height:
-        52px;
+    border: 1px solid #444348;
 
-    display:
-        grid;
+    color: var(--orange);
 
-    place-items:
-        center;
-
-    border:
-        1px solid #444348;
-
-    color:
-        var(--orange);
-
-    font-size:
-        13px;
-
-    letter-spacing:
-        1px;
+    font-size: 13px;
+    letter-spacing: 1px;
 }
-
 
 .data-feature span {
+    display: block;
 
-    display:
-        block;
+    color: #bbb8b5;
 
-    color:
-        #bbb8b5;
-
-    font-size:
-        10px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        1px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-
 .data-feature small {
+    display: block;
 
-    display:
-        block;
+    margin-top: 6px;
 
-    margin-top:
-        6px;
-
-    color:
-        #68676c;
-
-    font-size:
-        10px;
+    color: #68676c;
+    font-size: 10px;
 }
 
 
@@ -1360,12 +970,8 @@
 ========================================================= */
 
 .investigator-section {
-
-    width:
-        100%;
-
-    padding:
-        120px 5%;
+    width: 100%;
+    padding: 120px 5%;
 
     background:
         radial-gradient(
@@ -1374,54 +980,30 @@
             transparent 55%
         );
 
-    border-bottom:
-        1px solid #242427;
-
-    text-align:
-        center;
+    border-bottom: 1px solid #242427;
+    text-align: center;
 }
-
 
 .investigator-inner {
-
-    max-width:
-        850px;
-
-    margin:
-        0 auto;
+    max-width: 850px;
+    margin: 0 auto;
 }
-
 
 .investigator-inner h2 {
+    margin: 20px 0;
 
-    margin:
-        20px 0;
-
-    font-size:
-        clamp(34px, 5vw, 58px);
-
-    letter-spacing:
-        -2px;
+    font-size: clamp(34px, 5vw, 58px);
+    letter-spacing: -2px;
 }
-
 
 .investigator-inner h2 span {
-
-    display:
-        block;
-
-    color:
-        var(--orange);
+    display: block;
+    color: var(--orange);
 }
 
-
 .investigator-inner > p:last-child {
-
-    color:
-        #77757a;
-
-    font-size:
-        14px;
+    color: #77757a;
+    font-size: 14px;
 }
 
 
@@ -1430,67 +1012,38 @@
 ========================================================= */
 
 .final-cta {
+    width: min(850px, 90%);
 
-    width:
-        min(850px, 90%);
+    margin: 0 auto;
+    padding: 120px 0;
 
-    margin:
-        0 auto;
-
-    padding:
-        120px 0;
-
-    text-align:
-        center;
+    text-align: center;
 }
-
 
 .cta-line {
+    width: 70px;
+    height: 1px;
 
-    width:
-        70px;
-
-    height:
-        1px;
-
-    margin:
-        0 auto 30px;
-
-    background:
-        var(--orange);
+    margin: 0 auto 30px;
+    background: var(--orange);
 }
-
 
 .final-cta h2 {
+    margin: 15px 0;
 
-    margin:
-        15px 0;
-
-    font-size:
-        clamp(32px, 5vw, 52px);
-
-    letter-spacing:
-        -1.5px;
+    font-size: clamp(32px, 5vw, 52px);
+    letter-spacing: -1.5px;
 }
-
 
 .final-cta > p:not(.tag) {
+    margin: 0 auto 28px;
 
-    margin:
-        0 auto 28px;
-
-    color:
-        #77757a;
-
-    line-height:
-        1.7;
+    color: #77757a;
+    line-height: 1.7;
 }
 
-
 .cta-button {
-
-    min-width:
-        260px;
+    min-width: 260px;
 }
 
 
@@ -1499,70 +1052,40 @@
 ========================================================= */
 
 @media (max-width: 1000px) {
-
     .hero {
+        width: 88%;
 
-        width:
-            88%;
+        grid-template-columns: 1fr;
+        gap: 55px;
 
-        grid-template-columns:
-            1fr;
-
-        gap:
-            55px;
-
-        padding:
-            65px 0 50px;
+        padding: 65px 0 50px;
     }
-
 
     .hero-content {
-
-        max-width:
-            760px;
+        max-width: 760px;
     }
-
 
     .investigation-terminal {
-
-        max-width:
-            650px;
-
-        justify-self:
-            start;
+        max-width: 650px;
+        justify-self: start;
     }
-
 
     .hero-stats {
-
-        margin-top:
-            5px;
+        margin-top: 5px;
     }
-
 
     .investigation-steps {
-
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
-
 
     .data-section {
-
-        padding-left:
-            6%;
-
-        padding-right:
-            6%;
+        padding-left: 6%;
+        padding-right: 6%;
     }
-
 
     .data-section-content {
-
-        gap:
-            50px;
+        gap: 50px;
     }
-
 }
 
 
@@ -1571,170 +1094,94 @@
 ========================================================= */
 
 @media (max-width: 700px) {
-
     .hero {
+        width: 90%;
 
-        width:
-            90%;
-
-        padding:
-            45px 0 35px;
-
-        gap:
-            40px;
+        padding: 45px 0 35px;
+        gap: 40px;
     }
-
 
     .hero h1 {
-
-        font-size:
-            clamp(48px, 15vw, 78px);
-
-        letter-spacing:
-            -3px;
+        font-size: clamp(48px, 15vw, 78px);
+        letter-spacing: -3px;
     }
-
 
     .hero-description {
-
-        font-size:
-            14px;
+        font-size: 14px;
     }
-
 
     .hero-actions {
-
-        align-items:
-            stretch;
-
-        flex-direction:
-            column;
+        align-items: stretch;
+        flex-direction: column;
     }
-
 
     .hero-actions .button,
     .hero-secondary-button {
-
-        width:
-            100%;
+        width: 100%;
     }
-
 
     .investigation-terminal {
-
-        max-width:
-            none;
+        max-width: none;
     }
-
 
     .terminal-body {
-
-        padding:
-            18px;
+        padding: 18px;
     }
-
 
     .terminal-row {
-
-        min-height:
-            50px;
+        min-height: 50px;
     }
-
 
     .hero-stats {
-
-        grid-template-columns:
-            1fr;
-
-        width:
-            100%;
+        grid-template-columns: 1fr;
+        width: 100%;
     }
-
 
     .hero-stat {
+        min-height: 85px;
 
-        min-height:
-            85px;
-
-        border-right:
-            none;
-
-        border-bottom:
-            1px solid #2c2c30;
+        border-right: none;
+        border-bottom: 1px solid #2c2c30;
     }
-
 
     .hero-stat:last-child {
-
-        border-bottom:
-            none;
+        border-bottom: none;
     }
-
 
     .home-section {
-
-        width:
-            90%;
-
-        padding:
-            75px 0;
+        width: 90%;
+        padding: 75px 0;
     }
-
 
     .investigation-steps {
-
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
     }
-
 
     .investigation-step {
-
-        min-height:
-            auto;
-
-        padding:
-            24px;
+        min-height: auto;
+        padding: 24px;
     }
-
 
     .data-section {
-
-        padding:
-            75px 5%;
+        padding: 75px 5%;
     }
-
 
     .data-section-content {
-
-        grid-template-columns:
-            1fr;
-
-        gap:
-            40px;
+        grid-template-columns: 1fr;
+        gap: 40px;
     }
-
 
     .data-features {
-
-        grid-template-columns:
-            1fr;
+        grid-template-columns: 1fr;
     }
-
 
     .investigator-section {
-
-        padding:
-            85px 7%;
+        padding: 85px 7%;
     }
-
 
     .final-cta {
-
-        padding:
-            85px 0;
+        padding: 85px 0;
     }
-
 }
 
 
@@ -1743,50 +1190,38 @@
 ========================================================= */
 
 @media (max-width: 430px) {
-
     .case-status {
-
-        font-size:
-            9px;
-
-        letter-spacing:
-            1px;
+        font-size: 9px;
+        letter-spacing: 1px;
     }
-
 
     .terminal-row strong {
-
-        max-width:
-            55%;
-
-        font-size:
-            9px;
+        max-width: 55%;
+        font-size: 9px;
     }
-
 
     .hero-subtitle {
-
-        font-size:
-            19px;
+        font-size: 19px;
     }
-
 
     .data-feature {
-
-        gap:
-            12px;
+        gap: 12px;
     }
-
 
     .data-feature > strong {
-
-        min-width:
-            45px;
-
-        height:
-            45px;
+        min-width: 45px;
+        height: 45px;
     }
 
+    .loader-title {
+        font-size: 21px;
+        letter-spacing: 2.5px;
+    }
+
+    .loader-subtitle {
+        font-size: 8px;
+        letter-spacing: 1.2px;
+    }
 }
 
 </style>
@@ -1795,6 +1230,44 @@
 
 
 {% block content %}
+
+<!-- =========================================================
+     SCREEN LOADER
+========================================================= -->
+
+<div class="screen-loader" id="screenLoader">
+
+    <div class="loader-content">
+
+        <div class="loader-logo">
+
+            <img
+                src="{{ url_for('static', filename='images/logo.png') }}"
+                alt="Investigation System Logo"
+            >
+
+        </div>
+
+        <div class="loader-title">
+            DATA <span>DETECTIVE</span>
+        </div>
+
+        <div class="loader-subtitle">
+            Initializing investigation system
+        </div>
+
+        <div class="loader-progress">
+            <span></span>
+        </div>
+
+        <div class="loader-status">
+            Loading case files...
+        </div>
+
+    </div>
+
+</div>
+
 
 <div class="home-page">
 
@@ -1805,11 +1278,7 @@
 
 <section class="hero">
 
-
-    <!-- HERO CONTENT -->
-
     <div class="hero-content">
-
 
         <div class="case-status">
 
@@ -1818,7 +1287,6 @@
             INVESTIGATION SYSTEM ONLINE
 
         </div>
-
 
         <p class="tag">
 
@@ -1834,7 +1302,6 @@
 
         </p>
 
-
         <h1>
 
             DATA
@@ -1845,16 +1312,13 @@
 
         </h1>
 
-
         <div class="hero-line"></div>
-
 
         <p class="hero-subtitle">
 
             The evidence is in the data.
 
         </p>
-
 
         <p class="hero-description">
 
@@ -1864,9 +1328,7 @@
 
         </p>
 
-
         <div class="hero-actions">
-
 
             <a
                 class="button"
@@ -1883,7 +1345,6 @@
 
             </a>
 
-
             <a
                 class="hero-secondary-button"
                 href="#how-it-works"
@@ -1893,9 +1354,7 @@
 
             </a>
 
-
         </div>
-
 
     </div>
 
@@ -1906,9 +1365,7 @@
 
     <div class="investigation-terminal">
 
-
         <div class="terminal-header">
-
 
             <div class="terminal-title">
 
@@ -1918,19 +1375,15 @@
 
             </div>
 
-
             <span class="terminal-id">
 
                 CASE_001
 
             </span>
 
-
         </div>
 
-
         <div class="terminal-body">
-
 
             <div class="terminal-row">
 
@@ -1944,7 +1397,6 @@
 
             </div>
 
-
             <div class="terminal-row">
 
                 <span>
@@ -1956,7 +1408,6 @@
                 </strong>
 
             </div>
-
 
             <div class="terminal-row">
 
@@ -1970,7 +1421,6 @@
 
             </div>
 
-
             <div class="terminal-row">
 
                 <span>
@@ -1983,12 +1433,9 @@
 
             </div>
 
-
             <div class="terminal-divider"></div>
 
-
             <div class="terminal-scan">
-
 
                 <div class="scan-label">
 
@@ -2002,19 +1449,15 @@
 
                 </div>
 
-
                 <div class="scan-bar">
 
                     <span></span>
 
                 </div>
 
-
             </div>
 
-
         </div>
-
 
     </div>
 
@@ -2024,7 +1467,6 @@
     ====================================================== -->
 
     <div class="hero-stats">
-
 
         <div class="hero-stat">
 
@@ -2038,7 +1480,6 @@
 
         </div>
 
-
         <div class="hero-stat">
 
             <strong>
@@ -2050,7 +1491,6 @@
             </span>
 
         </div>
-
 
         <div class="hero-stat">
 
@@ -2064,9 +1504,7 @@
 
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -2080,31 +1518,24 @@
     id="how-it-works"
 >
 
-
     <div class="section-heading">
-
 
         <p class="tag">
             THE INVESTIGATION PROCESS
         </p>
 
-
         <h2>
             Follow the evidence.
         </h2>
-
 
         <p>
             Every clue matters. Every pattern tells a story.
             Use data science and logical reasoning to uncover it.
         </p>
 
-
     </div>
 
-
     <div class="investigation-steps">
-
 
         <div class="investigation-step">
 
@@ -2120,14 +1551,11 @@
 
             </div>
 
-
             <div class="step-line"></div>
-
 
             <h3>
                 ANALYZE
             </h3>
-
 
             <p>
                 Examine transaction data and identify
@@ -2136,7 +1564,6 @@
             </p>
 
         </div>
-
 
         <div class="investigation-step">
 
@@ -2152,14 +1579,11 @@
 
             </div>
 
-
             <div class="step-line"></div>
-
 
             <h3>
                 CONNECT
             </h3>
-
 
             <p>
                 Follow movements, compare timestamps,
@@ -2168,7 +1592,6 @@
             </p>
 
         </div>
-
 
         <div class="investigation-step">
 
@@ -2184,14 +1607,11 @@
 
             </div>
 
-
             <div class="step-line"></div>
-
 
             <h3>
                 REASON
             </h3>
-
 
             <p>
                 Build your evidence board and determine
@@ -2200,7 +1620,6 @@
             </p>
 
         </div>
-
 
         <div class="investigation-step">
 
@@ -2216,14 +1635,11 @@
 
             </div>
 
-
             <div class="step-line"></div>
-
 
             <h3>
                 ACCUSE
             </h3>
-
 
             <p>
                 Select your suspect and defend your
@@ -2233,9 +1649,7 @@
 
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -2246,23 +1660,18 @@
 
 <section class="data-section">
 
-
     <div class="data-section-content">
 
-
         <div class="data-copy">
-
 
             <p class="tag">
                 POWERED BY DATA SCIENCE
             </p>
 
-
             <h2>
                 The clues are hidden
                 inside the data.
             </h2>
-
 
             <p>
                 Data Detective transforms a crime investigation
@@ -2271,12 +1680,9 @@
                 timeline correlation, and evidence-based reasoning.
             </p>
 
-
         </div>
 
-
         <div class="data-features">
-
 
             <div class="data-feature">
 
@@ -2298,7 +1704,6 @@
 
             </div>
 
-
             <div class="data-feature">
 
                 <strong>
@@ -2318,7 +1723,6 @@
                 </div>
 
             </div>
-
 
             <div class="data-feature">
 
@@ -2340,7 +1744,6 @@
 
             </div>
 
-
             <div class="data-feature">
 
                 <strong>
@@ -2361,12 +1764,9 @@
 
             </div>
 
-
         </div>
 
-
     </div>
-
 
 </section>
 
@@ -2377,14 +1777,11 @@
 
 <section class="investigator-section">
 
-
     <div class="investigator-inner">
-
 
         <p class="tag">
             DETECTIVE'S RULE
         </p>
-
 
         <h2>
 
@@ -2396,14 +1793,11 @@
 
         </h2>
 
-
         <p>
             Patterns can reveal what people try to hide.
         </p>
 
-
     </div>
-
 
 </section>
 
@@ -2414,26 +1808,21 @@
 
 <section class="final-cta">
 
-
     <div class="cta-line"></div>
-
 
     <p class="tag">
         CASE FILE READY
     </p>
 
-
     <h2>
         Ready to investigate?
     </h2>
-
 
     <p>
         Follow the evidence.
         Trust the data.
         Question everything.
     </p>
-
 
     <a
         class="button cta-button"
@@ -2450,10 +1839,27 @@
 
     </a>
 
-
 </section>
 
 
 </div>
+
+
+<script>
+    window.addEventListener("load", function () {
+
+        const screenLoader =
+            document.getElementById("screenLoader");
+
+        if (!screenLoader) return;
+
+        setTimeout(function () {
+
+            screenLoader.classList.add("hidden");
+
+        }, 2400);
+
+    });
+</script>
 
 {% endblock %}
